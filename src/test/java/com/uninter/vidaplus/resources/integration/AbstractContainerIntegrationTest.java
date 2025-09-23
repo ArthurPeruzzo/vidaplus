@@ -5,15 +5,26 @@ import com.github.dockerjava.api.model.ContainerConfig;
 import com.uninter.vidaplus.resources.AbstractContainer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.ContainerState;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+@ActiveProfiles("integration-test")
+@Transactional
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AbstractContainerIntegrationTest extends AbstractContainer {
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Test
     void shouldCreateContainerSuccessFully() {
@@ -38,31 +49,15 @@ class AbstractContainerIntegrationTest extends AbstractContainer {
         Assertions.assertEquals("mysql:8.4.6", image);
     }
 
-    @Test
-    void shouldCleanDatabaseAfterEach() throws SQLException {
-        try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
-            stmt.execute("CREATE TABLE IF NOT EXISTS test_table (id INT PRIMARY KEY, name VARCHAR(50))");
-            stmt.execute("INSERT INTO test_table (id, name) VALUES (1, 'Test')");
-        }
+    @ParameterizedTest
+    @ValueSource(strings = {"Test 1", "Test 2", "Test 3"})
+    void shouldHaveOneElementInTable_TransactionalOptional(String value) {
+        jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS test_table (id INT PRIMARY KEY AUTO_INCREMENT, name VARCHAR(50))");
+        jdbcTemplate.update("INSERT INTO test_table (name) VALUES (?)", value);
 
-        cleanDatabase();
-
-        try (Connection conn = dataSource.getConnection();
-             Statement stmt = conn.createStatement()) {
-
-            try (ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM test_table")) {
-                rs.next();
-                int count = rs.getInt(1);
-                Assertions.assertEquals(0, count, "Tabela deve estar vazia após o cleanup");
-            }
-
-            try (ResultSet rs1 = stmt.executeQuery("SELECT COUNT(*) FROM flyway_schema_history")) {
-                rs1.next();
-                int flywayCount = rs1.getInt(1);
-                Assertions.assertTrue(flywayCount > 0, "Tabela do Flyway não deve estar vazia");
-            }
-        }
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT * FROM test_table");
+        int size = rows.size();
+        Assertions.assertEquals(1, size, "Deve haver somente 1 registro na tabela");
     }
 
 }
