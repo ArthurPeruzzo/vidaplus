@@ -49,6 +49,7 @@ class AbstractContainerIntegrationTest extends AbstractContainer {
         Assertions.assertEquals("mysql:8.4.6", image);
     }
 
+    //TODO isso so funciona em certos contextos.
     @ParameterizedTest
     @ValueSource(strings = {"Test 1", "Test 2", "Test 3"})
     void shouldHaveOneElementInTable_TransactionalOptional(String value) {
