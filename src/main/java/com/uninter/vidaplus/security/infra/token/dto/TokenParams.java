@@ -1,4 +1,6 @@
 package com.uninter.vidaplus.security.infra.token.dto;
 
-public record TokenParams(String email) {
+import java.util.List;
+
+public record TokenParams(Long userId, String email, List<String> roles) {
 }

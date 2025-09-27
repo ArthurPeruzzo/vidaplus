@@ -4,8 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -13,23 +16,28 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class JwtTokenService implements TokenGateway {
 
-    private static final String SECRET_KEY = "4Z^XrroxR@dWxqf$mTTKwW$!@#qGr4P"; // Chave secreta utilizada para gerar e verificar o token
+    private static final String EMAIL = "email";
+    private static final String ROLES = "roles";
 
-    private static final String ISSUER = "vida-plus"; // Emissor do token
+    private final Algorithm algorithm;
+    private final String jwtIssuer;
 
     @Override
     public String generateToken(TokenParams params) {
         try {
-            // Define o algoritmo HMAC SHA256 para criar a assinatura do token passando a chave secreta definida
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            String userId = String.valueOf(params.userId());
             return JWT.create()
-                    .withIssuer(ISSUER) // Define o emissor do token
-                    .withIssuedAt(creationDate()) // Define a data de emissão do token
-                    .withExpiresAt(expirationDate()) // Define a data de expiração do token
-                    .withSubject(params.email()) // Define o assunto do token (neste caso, o nome de usuário)
-                    .sign(algorithm); // Assina o token usando o algoritmo especificado
+                    .withIssuer(jwtIssuer)
+                    .withIssuedAt(creationDate())
+                    .withExpiresAt(expirationDate())
+                    .withSubject(userId)
+                    .withClaim(EMAIL, params.email())
+                    .withArrayClaim(ROLES, params.roles().toArray(new String[0]))
+                    .sign(algorithm);
         } catch (JWTCreationException exception){
             throw new JWTCreationException("Erro ao gerar token.", exception);
         }
@@ -37,15 +45,30 @@ public class JwtTokenService implements TokenGateway {
 
     public String getSubjectFromToken(String token) {
         try {
-            // Define o algoritmo HMAC SHA256 para verificar a assinatura do token passando a chave secreta definida
-            Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
+            return decodeToken(token).getSubject();
+        } catch (JWTVerificationException ex){
+            throw new JWTVerificationException("Token inválido ou expirado.", ex);
+        }
+    }
+
+    public String getEmailFromToken(String token) {
+        try {
+            return decodeToken(token).getClaim(EMAIL).asString();
+        } catch (JWTVerificationException ex) {
+            log.warn("Falha ao verificar JWT: {}", ex.getMessage());
+            throw new JWTVerificationException("Token inválido ou expirado.", ex);
+        }
+    }
+
+    public DecodedJWT decodeToken(String token) {
+        try {
             return JWT.require(algorithm)
-                    .withIssuer(ISSUER) // Define o emissor do token
+                    .withIssuer(jwtIssuer)
                     .build()
-                    .verify(token) // Verifica a validade do token
-                    .getSubject(); // Obtém o assunto (neste caso, o nome de usuário) do token
-        } catch (JWTVerificationException exception){
-            throw new JWTVerificationException("Token inválido ou expirado.");
+                    .verify(token);
+        } catch (JWTVerificationException ex) {
+            log.warn("Falha ao verificar JWT: {}", ex.getMessage());
+            throw new JWTVerificationException("Token inválido ou expirado.", ex);
         }
     }
 

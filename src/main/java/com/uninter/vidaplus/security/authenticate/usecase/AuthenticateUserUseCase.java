@@ -1,8 +1,10 @@
 package com.uninter.vidaplus.security.authenticate.usecase;
 
 import com.uninter.vidaplus.security.authenticate.controller.json.request.LoginRequestJson;
+import com.uninter.vidaplus.security.domain.User;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;
+import com.uninter.vidaplus.security.infra.userdetails.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,8 +23,12 @@ public class AuthenticateUserUseCase {
                 new UsernamePasswordAuthenticationToken(loginRequestJson.email(), loginRequestJson.password());
 
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
+        User user = userDetails.getUser();
 
-        return tokenGateway.generateToken(new TokenParams(loginRequestJson.email()));
+        TokenParams tokenParams = new TokenParams(user.getId(), user.getEmail(), user.getRolesFormattedAsString());
+
+        return tokenGateway.generateToken(tokenParams);
     }
 
 }

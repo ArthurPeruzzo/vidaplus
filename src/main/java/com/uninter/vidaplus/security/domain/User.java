@@ -10,18 +10,15 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
 @ToString(exclude = "password")
 public class User implements Serializable {
-
     private Long id;
-
-    @Getter
     private String email;
-
-    @Getter
     private String password;
-
-    @Getter
     private List<Role> roles;
 
+    public List<String> getRolesFormattedAsString() {
+        return roles.stream().map(role -> role.getName().name()).toList();
+    }
 }

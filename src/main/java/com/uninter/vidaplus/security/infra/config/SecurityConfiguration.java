@@ -34,9 +34,6 @@ public class SecurityConfiguration {
             "/authenticate/test1"
     };
 
-    protected static final String [] ROLE_HEALTHCARE_PROFESSIONAL = {
-    };
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
@@ -45,7 +42,6 @@ public class SecurityConfiguration {
                         auth.requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
                                 .requestMatchers(ENDPOINTS_PATIENT).hasRole("PATIENT")
-                                .requestMatchers(ROLE_HEALTHCARE_PROFESSIONAL).hasRole("ROLE_HEALTHCARE_PROFESSIONAL")
                                 .anyRequest().denyAll()
                 ).addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
