@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Base64;
+
 @Configuration
 public class JwtConfig {
 
@@ -16,7 +18,7 @@ public class JwtConfig {
 
     @Bean
     public Algorithm jwtAlgorithm() {
-        return Algorithm.HMAC256(secretKey);
+        return Algorithm.HMAC256(Base64.getUrlDecoder().decode(secretKey));
     }
 
     @Bean

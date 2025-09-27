@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,15 +23,21 @@ public class JwtTokenService implements TokenGateway {
 
     private static final String EMAIL = "email";
     private static final String ROLES = "roles";
+    private static final String AUTHORIZATION = "Authorization";
 
     private final Algorithm algorithm;
     private final String jwtIssuer;
+    private final HttpServletRequest httpServletRequest;
+
+    private String getAuthorization() {
+        return httpServletRequest.getHeader(AUTHORIZATION).replace("Bearer ", "");
+    }
 
     @Override
     public String generateToken(TokenParams params) {
         try {
             String userId = String.valueOf(params.userId());
-            return JWT.create()
+            String token = JWT.create()
                     .withIssuer(jwtIssuer)
                     .withIssuedAt(creationDate())
                     .withExpiresAt(expirationDate())
@@ -38,22 +45,16 @@ public class JwtTokenService implements TokenGateway {
                     .withClaim(EMAIL, params.email())
                     .withArrayClaim(ROLES, params.roles().toArray(new String[0]))
                     .sign(algorithm);
+            return "Bearer " + token;
         } catch (JWTCreationException exception){
             throw new JWTCreationException("Erro ao gerar token.", exception);
         }
     }
 
-    public String getSubjectFromToken(String token) {
+    @Override
+    public String getEmail() {
         try {
-            return decodeToken(token).getSubject();
-        } catch (JWTVerificationException ex){
-            throw new JWTVerificationException("Token inválido ou expirado.", ex);
-        }
-    }
-
-    public String getEmailFromToken(String token) {
-        try {
-            return decodeToken(token).getClaim(EMAIL).asString();
+            return decodeToken(getAuthorization()).getClaim(EMAIL).asString();
         } catch (JWTVerificationException ex) {
             log.warn("Falha ao verificar JWT: {}", ex.getMessage());
             throw new JWTVerificationException("Token inválido ou expirado.", ex);
