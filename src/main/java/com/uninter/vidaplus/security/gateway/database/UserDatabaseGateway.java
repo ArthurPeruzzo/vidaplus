@@ -1,14 +1,17 @@
 package com.uninter.vidaplus.security.gateway.database;
 
 import com.uninter.vidaplus.security.domain.User;
+import com.uninter.vidaplus.security.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.security.gateway.mapper.user.UserMapper;
 import com.uninter.vidaplus.security.gateway.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class UserDatabaseGateway implements UserGateway {
 
@@ -21,7 +24,8 @@ public class UserDatabaseGateway implements UserGateway {
             return userRepository.findByEmail(email)
                     .map(userMapper::entityToDomain);
         } catch (Exception e) {
-         throw e; //TODO tratar melhor os erros
+            log.error("Erro ao buscar usuario por email: {}", email, e);
+            throw new ErrorAccessDatabaseException();
         }
     }
 }

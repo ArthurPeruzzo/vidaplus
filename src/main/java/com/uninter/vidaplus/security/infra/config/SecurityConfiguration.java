@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.security.infra.config;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -43,7 +44,19 @@ public class SecurityConfiguration {
                                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
                                 .requestMatchers(ENDPOINTS_PATIENT).hasRole("PATIENT")
                                 .anyRequest().denyAll()
-                ).addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                ).exceptionHandling(exception ->
+                        exception.authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\":\"Não autenticado\"}");
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\":\"Acesso negado\"}");
+                                })
+                )
+                .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
