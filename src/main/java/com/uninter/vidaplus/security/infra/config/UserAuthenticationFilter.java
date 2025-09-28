@@ -9,16 +9,19 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import javax.security.sasl.AuthenticationException;
 import java.io.IOException;
 import java.util.Arrays;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class UserAuthenticationFilter extends OncePerRequestFilter {
 
@@ -26,22 +29,31 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
     private final UserGateway userGateway;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
+
         if (checkIfEndpointIsNotPublic(request)) {
-            String token = recoveryToken(request);
-            if (token == null) {
-                throw new RuntimeException("O token está ausente.");
-            }
-                String email = tokenGateway.getEmail();
-                User user = userGateway.findByEmail(email).get(); //tratar excecao
-                UserDetailsImpl userDetails = new UserDetailsImpl(user);
-
-                Authentication authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
-
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            verifyHasTokenInRequest(request);
+            UserDetailsImpl userDetails = getUserDetails();
+            getAndSetAuthentication(userDetails);
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
+        String requestURI = request.getRequestURI();
+        return !Arrays.asList(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
+    }
+
+    private void verifyHasTokenInRequest(HttpServletRequest request) throws AuthenticationException {
+        String token = recoveryToken(request);
+        if (token == null) {
+            log.warn("token ausente");
+            throw new AuthenticationException("O token está ausente");
+        }
     }
 
     private String recoveryToken(HttpServletRequest request) {
@@ -52,8 +64,19 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
         return null;
     }
 
-    private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
-        String requestURI = request.getRequestURI();
-        return !Arrays.asList(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
+    private UserDetailsImpl getUserDetails() throws AuthenticationException {
+        String email = tokenGateway.getEmail();
+        User user = userGateway.findByEmail(email).orElseThrow(() -> {
+            log.error("Usuário não foi encontrado para o email: {}", email);
+            return new AuthenticationException("Não foi possível processar sua solicitação");
+        });
+        return new UserDetailsImpl(user);
+    }
+
+    private static void getAndSetAuthentication(UserDetailsImpl userDetails) {
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 }
