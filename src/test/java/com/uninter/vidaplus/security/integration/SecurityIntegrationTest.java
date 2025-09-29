@@ -1,6 +1,6 @@
 package com.uninter.vidaplus.security.integration;
 
-import com.uninter.vidaplus.resources.AbstractContainer;
+import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
 import com.uninter.vidaplus.security.domain.RoleEnum;
 import com.uninter.vidaplus.security.gateway.entity.RoleEntity;
 import com.uninter.vidaplus.security.gateway.entity.UserEntity;

@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.resources;
+package com.uninter.vidaplus.resources.testcontainer;
 
 import org.testcontainers.containers.MySQLContainer;
 

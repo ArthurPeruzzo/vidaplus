@@ -1,8 +1,8 @@
-package com.uninter.vidaplus.resources.integration;
+package com.uninter.vidaplus.resources.testcontainer.integration;
 
 import com.github.dockerjava.api.command.InspectContainerResponse;
 import com.github.dockerjava.api.model.ContainerConfig;
-import com.uninter.vidaplus.resources.AbstractContainer;
+import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.resources;
+package com.uninter.vidaplus.resources.testcontainer;
 
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;

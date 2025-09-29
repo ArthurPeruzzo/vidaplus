@@ -6,7 +6,10 @@ import com.uninter.vidaplus.security.authenticate.usecase.AuthenticateUserUseCas
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,15 +22,5 @@ public class AuthenticateController {
     public ResponseEntity<LoginResponseJson> login(@RequestBody @Valid LoginRequestJson loginRequestJson) {
         String token = authenticateUserUseCase.authenticate(loginRequestJson);
         return ResponseEntity.ok(new LoginResponseJson(token));
-    }
-
-    @GetMapping("/test")
-    public String test() {
-        return "oi";
-    }
-
-    @GetMapping("/test1")
-    public String test1() {
-        return "oi1";
     }
 }
