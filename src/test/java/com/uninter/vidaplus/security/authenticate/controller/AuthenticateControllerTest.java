@@ -1,7 +1,7 @@
 package com.uninter.vidaplus.security.authenticate.controller;
 
 import com.uninter.vidaplus.resources.NoSecurityConfiguration;
-import com.uninter.vidaplus.security.authenticate.controller.json.request.LoginRequestJson;
+import com.uninter.vidaplus.security.authenticate.controller.dto.LoginInputDto;
 import com.uninter.vidaplus.security.authenticate.usecase.AuthenticateUserUseCase;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,6 +42,8 @@ class AuthenticateControllerTest {
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$." + field).value(expectedMessage));
+
+        Mockito.verifyNoInteractions(authenticateUserUseCase);
     }
 
     @Test
@@ -55,12 +57,14 @@ class AuthenticateControllerTest {
 
         String token = "any-token";
 
-        Mockito.when(authenticateUserUseCase.authenticate(Mockito.any(LoginRequestJson.class))).thenReturn(token);
+        Mockito.when(authenticateUserUseCase.authenticate(Mockito.any(LoginInputDto.class))).thenReturn(token);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/authenticate/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$.token").value(token));
+
+        Mockito.verify(authenticateUserUseCase).authenticate(Mockito.any(LoginInputDto.class));
     }
 }

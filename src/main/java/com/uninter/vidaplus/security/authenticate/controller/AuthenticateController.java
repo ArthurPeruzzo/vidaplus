@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.security.authenticate.controller;
 
+import com.uninter.vidaplus.security.authenticate.controller.dto.LoginInputDto;
 import com.uninter.vidaplus.security.authenticate.controller.json.request.LoginRequestJson;
 import com.uninter.vidaplus.security.authenticate.controller.json.response.LoginResponseJson;
 import com.uninter.vidaplus.security.authenticate.usecase.AuthenticateUserUseCase;
@@ -20,7 +21,9 @@ public class AuthenticateController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseJson> login(@RequestBody @Valid LoginRequestJson loginRequestJson) {
-        String token = authenticateUserUseCase.authenticate(loginRequestJson);
+        LoginInputDto loginInputDto = new LoginInputDto(loginRequestJson.email(), loginRequestJson.password());
+        String token = authenticateUserUseCase.authenticate(loginInputDto);
+
         return ResponseEntity.ok(new LoginResponseJson(token));
     }
 }
