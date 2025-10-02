@@ -2,7 +2,7 @@ package com.uninter.vidaplus.security.authenticate.usecase;
 
 import com.uninter.vidaplus.security.authenticate.controller.dto.LoginInputDto;
 import com.uninter.vidaplus.security.authenticate.exception.BadCredentialsAuthenticateException;
-import com.uninter.vidaplus.security.databuilder.UserDataBuilder;
+import com.uninter.vidaplus.security.databuilder.domain.UserDataBuilder;
 import com.uninter.vidaplus.security.domain.User;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;

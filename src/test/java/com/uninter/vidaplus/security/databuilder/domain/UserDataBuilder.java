@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.security.databuilder;
+package com.uninter.vidaplus.security.databuilder.domain;
 
 import com.uninter.vidaplus.security.domain.Role;
 import com.uninter.vidaplus.security.domain.User;

@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.security.integration;
+package com.uninter.vidaplus.security.authenticate.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
 import com.uninter.vidaplus.security.domain.RoleEnum;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @ActiveProfiles("integration-test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class SecurityIntegrationTest extends AbstractContainer {
+class AuthenticateIntegrationTest extends AbstractContainer {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
