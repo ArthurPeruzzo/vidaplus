@@ -1,10 +1,10 @@
 package com.uninter.vidaplus.security.authenticate.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
-import com.uninter.vidaplus.security.domain.RoleEnum;
-import com.uninter.vidaplus.security.gateway.entity.RoleEntity;
-import com.uninter.vidaplus.security.gateway.entity.UserEntity;
-import com.uninter.vidaplus.security.gateway.repository.UserRepository;
+import com.uninter.vidaplus.security.core.domain.RoleEnum;
+import com.uninter.vidaplus.security.core.gateway.entity.RoleEntity;
+import com.uninter.vidaplus.security.core.gateway.entity.UserEntity;
+import com.uninter.vidaplus.security.core.gateway.repository.UserRepository;
 import com.uninter.vidaplus.security.infra.config.SecurityConfiguration;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;

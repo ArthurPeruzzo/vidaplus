@@ -1,7 +1,7 @@
 package com.uninter.vidaplus.security.databuilder.entity;
 
-import com.uninter.vidaplus.security.domain.RoleEnum;
-import com.uninter.vidaplus.security.gateway.entity.RoleEntity;
+import com.uninter.vidaplus.security.core.domain.RoleEnum;
+import com.uninter.vidaplus.security.core.gateway.entity.RoleEntity;
 
 public class RoleEntityDataBuilder {
 

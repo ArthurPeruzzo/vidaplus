@@ -1,7 +1,7 @@
 package com.uninter.vidaplus.security.infra.config;
 
-import com.uninter.vidaplus.security.domain.User;
-import com.uninter.vidaplus.security.gateway.database.UserGateway;
+import com.uninter.vidaplus.security.core.domain.User;
+import com.uninter.vidaplus.security.core.gateway.database.UserGateway;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.userdetails.UserDetailsImpl;
 import jakarta.servlet.FilterChain;

@@ -1,6 +1,6 @@
 package com.uninter.vidaplus.security.infra.userdetails;
 
-import com.uninter.vidaplus.security.domain.User;
+import com.uninter.vidaplus.security.core.domain.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

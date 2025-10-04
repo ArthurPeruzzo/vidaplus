@@ -1,7 +1,7 @@
 package com.uninter.vidaplus.security.databuilder.entity;
 
-import com.uninter.vidaplus.security.gateway.entity.RoleEntity;
-import com.uninter.vidaplus.security.gateway.entity.UserEntity;
+import com.uninter.vidaplus.security.core.gateway.entity.RoleEntity;
+import com.uninter.vidaplus.security.core.gateway.entity.UserEntity;
 
 import java.util.ArrayList;
 import java.util.List;

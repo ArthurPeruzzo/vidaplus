@@ -1,7 +1,7 @@
 package com.uninter.vidaplus.security.databuilder.domain;
 
-import com.uninter.vidaplus.security.domain.Role;
-import com.uninter.vidaplus.security.domain.User;
+import com.uninter.vidaplus.security.core.domain.Role;
+import com.uninter.vidaplus.security.core.domain.User;
 
 import java.util.ArrayList;
 import java.util.List;
