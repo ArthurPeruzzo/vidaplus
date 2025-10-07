@@ -1,13 +1,13 @@
 package com.uninter.vidaplus.security.authenticate.usecase;
 
-import com.uninter.vidaplus.security.core.authenticate.controller.dto.LoginInputDto;
-import com.uninter.vidaplus.security.core.authenticate.exception.BadCredentialsAuthenticateException;
-import com.uninter.vidaplus.security.core.authenticate.usecase.AuthenticateUserUseCase;
-import com.uninter.vidaplus.security.core.domain.User;
+import com.uninter.vidaplus.security.authenticate.core.exception.BadCredentialsAuthenticateException;
+import com.uninter.vidaplus.security.authenticate.core.usecase.AuthenticateUserUseCase;
+import com.uninter.vidaplus.security.authenticate.infra.controller.dto.LoginInputDto;
 import com.uninter.vidaplus.security.databuilder.domain.UserDataBuilder;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;
 import com.uninter.vidaplus.security.infra.userdetails.UserDetailsImpl;
+import com.uninter.vidaplus.security.user.core.domain.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

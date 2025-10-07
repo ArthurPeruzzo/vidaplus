@@ -1,9 +1,9 @@
 package com.uninter.vidaplus.security.authenticate.controller;
 
 import com.uninter.vidaplus.resources.NoSecurityConfiguration;
-import com.uninter.vidaplus.security.core.authenticate.controller.AuthenticateController;
-import com.uninter.vidaplus.security.core.authenticate.controller.dto.LoginInputDto;
-import com.uninter.vidaplus.security.core.authenticate.usecase.AuthenticateUserUseCase;
+import com.uninter.vidaplus.security.authenticate.core.usecase.AuthenticateUserUseCase;
+import com.uninter.vidaplus.security.authenticate.infra.controller.AuthenticateController;
+import com.uninter.vidaplus.security.authenticate.infra.controller.dto.LoginInputDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

@@ -1,11 +1,11 @@
 package com.uninter.vidaplus.security.authenticate.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
-import com.uninter.vidaplus.security.core.domain.RoleEnum;
-import com.uninter.vidaplus.security.core.gateway.entity.RoleEntity;
-import com.uninter.vidaplus.security.core.gateway.entity.UserEntity;
-import com.uninter.vidaplus.security.core.gateway.repository.UserRepository;
 import com.uninter.vidaplus.security.infra.config.SecurityConfiguration;
+import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
+import com.uninter.vidaplus.security.user.infra.entity.RoleEntity;
+import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
+import com.uninter.vidaplus.security.user.infra.repository.UserRepository;
 import io.restassured.RestAssured;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;

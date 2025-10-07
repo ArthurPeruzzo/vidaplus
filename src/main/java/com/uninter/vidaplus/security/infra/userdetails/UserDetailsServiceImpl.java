@@ -1,8 +1,8 @@
 package com.uninter.vidaplus.security.infra.userdetails;
 
-import com.uninter.vidaplus.security.core.domain.User;
-import com.uninter.vidaplus.security.core.exception.UserNotFoundException;
-import com.uninter.vidaplus.security.core.gateway.database.UserGateway;
+import com.uninter.vidaplus.security.user.core.domain.User;
+import com.uninter.vidaplus.security.user.core.exception.UserNotFoundException;
+import com.uninter.vidaplus.security.user.core.gateway.UserGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
