@@ -7,7 +7,7 @@ public record AdministratorCreateRequestJson(
         String name,
         @NotBlank(message = "O sobrenome deve ser preenchido")
         String lastName,
-        @NotBlank(message = "O email")
+        @NotBlank(message = "O email deve ser preenchido")
         String email,
         @NotBlank(message = "A senha deve ser preenchida")
         String password) {
