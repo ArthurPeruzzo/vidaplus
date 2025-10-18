@@ -20,3 +20,11 @@ CREATE TABLE `users_roles` (
   CONSTRAINT `fk_users_roles_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `fk_users_roles_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 );
+
+INSERT INTO `roles`
+(name)
+VALUES('ROLE_ADMINISTRATOR');
+
+INSERT INTO `roles`
+(name)
+VALUES('ROLE_PATIENT');
