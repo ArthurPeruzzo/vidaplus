@@ -6,10 +6,15 @@ import com.uninter.vidaplus.security.user.infra.entity.RoleEntity;
 public class RoleEntityDataBuilder {
 
     private Long id = 1L;
-    private final RoleEnum role = RoleEnum.ROLE_ADMINISTRATOR;
+    private RoleEnum role = RoleEnum.ROLE_ADMINISTRATOR;
 
     public RoleEntityDataBuilder withId(Long id) {
         this.id = id;
+        return this;
+    }
+
+    public RoleEntityDataBuilder withRole(RoleEnum role) {
+        this.role = role;
         return this;
     }
 
