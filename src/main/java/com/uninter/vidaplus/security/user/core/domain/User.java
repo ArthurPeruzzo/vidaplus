@@ -18,6 +18,12 @@ public class User implements Serializable {
     private String password;
     private List<Role> roles;
 
+    public User(String email, String password, List<Role> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public List<String> getRolesFormattedAsString() {
         return roles.stream().map(role -> role.getName().name()).toList();
     }

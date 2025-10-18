@@ -28,7 +28,7 @@ public class SecurityConfiguration {
     };
 
     protected static final String [] ENDPOINTS_ADMIN = {
-            "/authenticate/test"
+            "/administrator/create"
     };
 
     protected static final String [] ENDPOINTS_PATIENT = {

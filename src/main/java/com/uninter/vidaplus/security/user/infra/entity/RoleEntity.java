@@ -23,4 +23,7 @@ public class RoleEntity {
     private RoleEnum name;
 
 
+    public RoleEntity(RoleEnum name) {
+        this.name = name;
+    }
 }

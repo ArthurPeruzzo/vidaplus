@@ -21,4 +21,10 @@ public class UserMapperImpl implements UserMapper {
                 entity.getPassword(),
                 entity.getRoles().stream().map(roleMapper::entityToDomain).toList());
     }
+
+    @Override
+    public UserEntity domainToEntity(User user) {
+        return new UserEntity(user.getEmail(), user.getPassword(),
+                user.getRoles().stream().map(roleMapper::domainToEntity).toList());
+    }
 }

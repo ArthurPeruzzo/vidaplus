@@ -11,4 +11,9 @@ public class RoleMapperImpl implements RoleMapper {
     public Role entityToDomain(RoleEntity entity) {
         return new Role(entity.getId(), entity.getName());
     }
+
+    @Override
+    public RoleEntity domainToEntity(Role role) {
+        return new RoleEntity(role.getName());
+    }
 }

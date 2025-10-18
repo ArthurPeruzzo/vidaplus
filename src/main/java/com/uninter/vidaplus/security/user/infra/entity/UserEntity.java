@@ -1,10 +1,7 @@
 package com.uninter.vidaplus.security.user.infra.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -26,9 +23,20 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @Setter
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id"))
     private List<RoleEntity> roles;
+
+    public UserEntity(String email, String password, List<RoleEntity> roles) {
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
+    public UserEntity(Long userId) {
+        this.id = userId;
+    }
 }

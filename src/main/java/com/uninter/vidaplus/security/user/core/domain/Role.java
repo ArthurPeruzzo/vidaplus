@@ -14,4 +14,7 @@ public class Role implements Serializable {
     @Getter
     private RoleEnum name;
 
+    public Role(RoleEnum roleEnum) {
+        this.name = roleEnum;
+    }
 }
