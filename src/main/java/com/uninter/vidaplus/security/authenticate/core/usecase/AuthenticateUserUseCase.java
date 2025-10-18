@@ -30,7 +30,7 @@ public class AuthenticateUserUseCase {
         UserDetailsImpl userDetails = (UserDetailsImpl) authenticate.getPrincipal();
         User user = userDetails.getUser();
 
-        TokenParams tokenParams = new TokenParams(user.getId(), user.getEmail(), user.getRolesFormattedAsString());
+        TokenParams tokenParams = new TokenParams(user.getId(), user.getEmail().value(), user.getRolesFormattedAsString());
 
         return tokenGateway.generateToken(tokenParams);
     }

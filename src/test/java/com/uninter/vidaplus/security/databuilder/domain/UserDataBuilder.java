@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.security.databuilder.domain;
 
+import com.uninter.vidaplus.security.user.core.domain.Email;
 import com.uninter.vidaplus.security.user.core.domain.Role;
 import com.uninter.vidaplus.security.user.core.domain.User;
 
@@ -8,7 +9,7 @@ import java.util.List;
 
 public class UserDataBuilder {
     private Long id = 1L;
-    private String email = "default@email.com";
+    private Email email = new Email("default@email.com");
     private String password = "defaultPassword";
     private List<Role> roles = new ArrayList<>();
 
@@ -17,7 +18,7 @@ public class UserDataBuilder {
         return this;
     }
 
-    public UserDataBuilder withEmail(String email) {
+    public UserDataBuilder withEmail(Email email) {
         this.email = email;
         return this;
     }

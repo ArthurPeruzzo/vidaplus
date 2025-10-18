@@ -14,11 +14,11 @@ import java.util.List;
 @ToString(exclude = "password")
 public class User implements Serializable {
     private Long id;
-    private String email;
+    private Email email;
     private String password;
     private List<Role> roles;
 
-    public User(String email, String password, List<Role> roles) {
+    public User(Email email, String password, List<Role> roles) {
         this.email = email;
         this.password = password;
         this.roles = roles;
