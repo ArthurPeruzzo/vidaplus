@@ -1,9 +1,8 @@
 package com.uninter.vidaplus.security.user.core.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.uninter.vidaplus.security.user.core.domain.password.Password;
+import com.uninter.vidaplus.security.user.core.domain.password.PasswordBase;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,10 +14,13 @@ import java.util.List;
 public class User implements Serializable {
     private Long id;
     private Email email;
-    private String password;
+
+    @Setter
+    private PasswordBase password;
+
     private List<Role> roles;
 
-    public User(Email email, String password, List<Role> roles) {
+    public User(Email email, Password password, List<Role> roles) {
         this.email = email;
         this.password = password;
         this.roles = roles;

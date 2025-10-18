@@ -2,6 +2,7 @@ package com.uninter.vidaplus.security.user.infra.gateway.mapper;
 
 import com.uninter.vidaplus.security.user.core.domain.Email;
 import com.uninter.vidaplus.security.user.core.domain.User;
+import com.uninter.vidaplus.security.user.core.domain.password.PasswordHash;
 import com.uninter.vidaplus.security.user.core.gateway.mapper.RoleMapper;
 import com.uninter.vidaplus.security.user.core.gateway.mapper.UserMapper;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
@@ -19,13 +20,13 @@ public class UserMapperImpl implements UserMapper {
         return new User(
                 entity.getId(),
                 new Email(entity.getEmail()),
-                entity.getPassword(),
+                new PasswordHash(entity.getPassword()),
                 entity.getRoles().stream().map(roleMapper::entityToDomain).toList());
     }
 
     @Override
     public UserEntity domainToEntity(User user) {
-        return new UserEntity(user.getEmail().value(), user.getPassword(),
+        return new UserEntity(user.getEmail().value(), user.getPassword().getValue(),
                 user.getRoles().stream().map(roleMapper::domainToEntity).toList());
     }
 }

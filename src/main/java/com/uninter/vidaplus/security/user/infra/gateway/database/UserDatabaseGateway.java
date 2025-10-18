@@ -37,8 +37,6 @@ public class UserDatabaseGateway implements UserGateway {
         }
     }
 
-    //TODO Quem tem que validar a senha passada eh o objeto Senha com o Value Object
-    //TODO Quem tem que validar o email passado eh o objeto Email com o Value Object
     @Override
     public User create(User user) {
         try {
