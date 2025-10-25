@@ -29,7 +29,8 @@ public class SecurityConfiguration {
 
     protected static final String [] ENDPOINTS_ADMIN = {
             "/administrator/create",
-            "/patient/create"
+            "/patient/create",
+            "/healthcare-professional/create"
     };
 
     protected static final String [] ENDPOINTS_PATIENT = {
