@@ -1,4 +1,6 @@
 package com.uninter.vidaplus.persona.infra.controller.patient.dto;
 
-public record PatientCreateDto(String name, String lastName, String email, String password) {
+import com.uninter.vidaplus.persona.core.domain.enums.SexEnum;
+
+public record PatientCreateDto(String name, String lastName, String email, SexEnum sex, String password) {
 }

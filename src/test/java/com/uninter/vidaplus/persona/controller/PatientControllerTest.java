@@ -37,7 +37,8 @@ class PatientControllerTest {
             "'{\"name\":\"\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"123456\"}', name, 'O nome deve ser preenchido'",
             "'{\"name\":\"Name\",\"lastName\":\"\",\"email\":\"email@email.com\",\"password\":\"123456\"}', lastName, 'O sobrenome deve ser preenchido'",
             "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"\",\"password\":\"123456\"}', email, 'O email deve ser preenchido'",
-            "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"\"}', password, 'A senha deve ser preenchida'"
+            "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"\"}', password, 'A senha deve ser preenchida'",
+            "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"123456\"}', sex, 'O sexo deve ser informado (FEMALE/MALE)'",
     })
     void shouldReturn400WithValidationMessage(String requestJson, String field, String expectedMessage) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/patient/create")
@@ -56,6 +57,7 @@ class PatientControllerTest {
                   "name": "any-name",
                   "lastName": "any-lastName",
                   "email": "email@email.com",
+                  "sex": "MALE",
                   "password": "password280b2054eb64"
                 }
                 """;

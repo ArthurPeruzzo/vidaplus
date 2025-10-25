@@ -26,7 +26,7 @@ public class CreatePatientUseCase {
         User user = buildUserPatient(dto);
         User userSaved = userGateway.create(user);
 
-        Patient patient = new Patient(null, userSaved.getId(), dto.name(), dto.lastName(), dto.email());
+        Patient patient = new Patient(null, userSaved.getId(), dto.name(), dto.lastName(), dto.sex(), dto.email());
         patientGateway.create(patient);
     }
 

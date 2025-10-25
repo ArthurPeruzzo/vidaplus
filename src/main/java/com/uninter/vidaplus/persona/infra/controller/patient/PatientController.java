@@ -23,7 +23,8 @@ public class PatientController {
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid PatientCreateRequestJson requestJson) {
         PatientCreateDto dto = new PatientCreateDto(
                 requestJson.name(), requestJson.lastName(),
-                requestJson.email(),requestJson.password());
+                requestJson.email(),requestJson.sex(),
+                requestJson.password());
 
         createPatientUseCase.create(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();

@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS `patient` (
     `id` bigint NOT NULL AUTO_INCREMENT,
     `name` varchar(255) NOT NULL,
     `last_name` varchar(255) NOT NULL,
+    `sex` varchar(255) NOT NULL,
     `user_id` bigint NOT NULL,
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_user_patient` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)

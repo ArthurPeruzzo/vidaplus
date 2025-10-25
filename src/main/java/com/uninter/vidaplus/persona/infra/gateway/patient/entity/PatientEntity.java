@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.persona.infra.gateway.patient.entity;
 
+import com.uninter.vidaplus.persona.core.domain.enums.SexEnum;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,13 +25,18 @@ public class PatientEntity {
     @Column(name = "lastName", nullable = false)
     private String lastName;
 
+    @Column(name = "sex", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private SexEnum sex;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
-    public PatientEntity(String name, String lastName, UserEntity userEntity) {
+    public PatientEntity(String name, String lastName, SexEnum sex, UserEntity userEntity) {
         this.name = name;
         this.lastName = lastName;
         this.user = userEntity;
+        this.sex = sex;
     }
 }

@@ -94,6 +94,7 @@ class PatientIntegrationTest extends AbstractContainer {
                             "name": "Teste",
                             "lastName": "testee",
                             "email": "any1@any.com",
+                            "sex": "MALE",
                             "password": "anyAaaaad#123"
                         }
                         """)

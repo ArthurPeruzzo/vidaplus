@@ -27,7 +27,7 @@ public class PatientDatabaseGateway implements PatientGateway {
     public void create(Patient patient) {
         try {
             UserEntity userEntityReference = entityManager.getReference(UserEntity.class, patient.getUserId());
-            PatientEntity entity = new PatientEntity(patient.getName(), patient.getLastName(), userEntityReference);
+            PatientEntity entity = new PatientEntity(patient.getName(), patient.getLastName(), patient.getSex(), userEntityReference);
             patientRepository.save(entity);
         } catch (Exception e) {
             log.error("Erro ao salvar paciente", e);
