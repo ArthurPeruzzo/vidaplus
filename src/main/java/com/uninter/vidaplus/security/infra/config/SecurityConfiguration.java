@@ -28,11 +28,11 @@ public class SecurityConfiguration {
     };
 
     protected static final String [] ENDPOINTS_ADMIN = {
-            "/administrator/create"
+            "/administrator/create",
+            "/patient/create"
     };
 
     protected static final String [] ENDPOINTS_PATIENT = {
-            "/authenticate/test1"
     };
 
     @Bean
