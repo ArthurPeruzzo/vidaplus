@@ -58,6 +58,7 @@ class PatientControllerTest {
                   "lastName": "any-lastName",
                   "email": "email@email.com",
                   "sex": "MALE",
+                  "healthcareFacilityId": 1,
                   "password": "password280b2054eb64"
                 }
                 """;
