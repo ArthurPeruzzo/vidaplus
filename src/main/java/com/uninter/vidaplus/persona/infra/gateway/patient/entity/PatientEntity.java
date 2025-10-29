@@ -30,7 +30,7 @@ public class PatientEntity {
     @Enumerated(EnumType.STRING)
     private SexEnum sex;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
 
@@ -38,10 +38,11 @@ public class PatientEntity {
     @JoinColumn(name = "healthcare_facility_id", referencedColumnName = "id")
     private HealthcareFacilityEntity healthcareFacility;
 
-    public PatientEntity(String name, String lastName, SexEnum sex, UserEntity userEntity) {
+    public PatientEntity(String name, String lastName, SexEnum sex, UserEntity userEntity, HealthcareFacilityEntity healthcareFacility) {
         this.name = name;
         this.lastName = lastName;
         this.user = userEntity;
         this.sex = sex;
+        this.healthcareFacility = healthcareFacility;
     }
 }

@@ -92,9 +92,25 @@ class PatientIntegrationTest extends AbstractContainer {
                 .body("""
                         {
                             "name": "Teste",
+                            "cnpj": "99607784000188"
+                        }
+                        """)
+                .when()
+                .post("/healthcare-facility/create")
+                .then()
+                .statusCode(201);
+
+        RestAssured
+                .given()
+                .contentType("application/json")
+                .header(header)
+                .body("""
+                        {
+                            "name": "Teste",
                             "lastName": "testee",
                             "email": "any1@any.com",
                             "sex": "MALE",
+                            "healthcareFacilityId": 1,
                             "password": "anyAaaaad#123"
                         }
                         """)

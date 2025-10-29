@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.persona.infra.gateway.patient.database;
 
+import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
 import com.uninter.vidaplus.persona.core.domain.patient.Patient;
 import com.uninter.vidaplus.persona.core.gateway.patient.PatientGateway;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
@@ -27,7 +28,9 @@ public class PatientDatabaseGateway implements PatientGateway {
     public void create(Patient patient) {
         try {
             UserEntity userEntityReference = entityManager.getReference(UserEntity.class, patient.getUserId());
-            PatientEntity entity = new PatientEntity(patient.getName(), patient.getLastName(), patient.getSex(), userEntityReference);
+            HealthcareFacilityEntity healthcareFacilityReference = entityManager.getReference(HealthcareFacilityEntity.class, patient.getHealthcareFacilityId());
+
+            PatientEntity entity = new PatientEntity(patient.getName(), patient.getLastName(), patient.getSex(), userEntityReference, healthcareFacilityReference);
             patientRepository.save(entity);
         } catch (Exception e) {
             log.error("Erro ao salvar paciente", e);

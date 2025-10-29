@@ -13,5 +13,7 @@ public record PatientCreateRequestJson (
         String email,
         @NotNull(message = "O sexo deve ser informado (FEMALE/MALE)")
         SexEnum sex,
+        @NotNull(message = "A unidade hospitalar deve ser informada")
+        Long healthcareFacilityId,
         @NotBlank(message = "A senha deve ser preenchida")
         String password){}

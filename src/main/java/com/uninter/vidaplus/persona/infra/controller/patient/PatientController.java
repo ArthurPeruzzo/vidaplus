@@ -24,6 +24,7 @@ public class PatientController {
         PatientCreateDto dto = new PatientCreateDto(
                 requestJson.name(), requestJson.lastName(),
                 requestJson.email(),requestJson.sex(),
+                requestJson.healthcareFacilityId(),
                 requestJson.password());
 
         createPatientUseCase.create(dto);
