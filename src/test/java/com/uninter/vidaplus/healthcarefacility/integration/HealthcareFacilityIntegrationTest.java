@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.persona.integration;
+package com.uninter.vidaplus.healthcarefacility.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
 import com.uninter.vidaplus.security.databuilder.entity.RoleEntityDataBuilder;
@@ -24,7 +24,7 @@ import java.util.List;
 
 @ActiveProfiles("integration-test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class HealthcareProfessionalIntegrationTest extends AbstractContainer {
+class HealthcareFacilityIntegrationTest extends AbstractContainer {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -92,14 +92,11 @@ class HealthcareProfessionalIntegrationTest extends AbstractContainer {
                 .body("""
                         {
                             "name": "Teste",
-                            "lastName": "testee",
-                            "email": "any1@any.com",
-                            "position": "MEDIC",
-                            "password": "anyAaaaad#123"
+                            "cnpj": "99607784000188"
                         }
                         """)
                 .when()
-                .post("/healthcare-professional/create")
+                .post("/healthcare-facility/create")
                 .then()
                 .statusCode(201);
 
