@@ -9,10 +9,13 @@ public class HealthcareProfessional extends Persona {
     private final HealthcareProfessionalPosition position;
     @Getter
     private final Long userId;
+    @Getter
+    private final Long healthcareFacilityId;
 
-    public HealthcareProfessional(Long id, Long userId, String name, String lastName, HealthcareProfessionalPosition position, String email) {
+    public HealthcareProfessional(Long id, Long userId, Long healthcareFacilityId, String name, String lastName, HealthcareProfessionalPosition position, String email) {
         super(id, name, lastName, email);
         this.userId = userId;
         this.position = position;
+        this.healthcareFacilityId = healthcareFacilityId;
     }
 }

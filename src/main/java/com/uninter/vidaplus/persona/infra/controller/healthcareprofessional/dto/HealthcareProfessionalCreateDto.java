@@ -4,5 +4,5 @@ import com.uninter.vidaplus.persona.core.domain.enums.HealthcareProfessionalPosi
 
 public record HealthcareProfessionalCreateDto(
         String name, String lastName, String email,
-        HealthcareProfessionalPosition position, String password) {
+        HealthcareProfessionalPosition position, Long healthcareFacilityId, String password) {
 }

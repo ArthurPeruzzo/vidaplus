@@ -26,7 +26,9 @@ public class CreateHealthcareProfessionalUseCase {
         User user = buildUserHealthcareProfessional(dto);
         User userSaved = userGateway.create(user);
 
-        HealthcareProfessional healthcareProfessional = new HealthcareProfessional(null, userSaved.getId(), dto.name(), dto.lastName(), dto.position(), dto.email());
+        HealthcareProfessional healthcareProfessional = new HealthcareProfessional(null, userSaved.getId(),
+                dto.healthcareFacilityId(), dto.name(), dto.lastName(), dto.position(), dto.email());
+
         healthcareProfessionalGateway.create(healthcareProfessional);
     }
 

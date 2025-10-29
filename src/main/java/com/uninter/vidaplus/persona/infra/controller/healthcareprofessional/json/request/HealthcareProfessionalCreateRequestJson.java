@@ -13,5 +13,7 @@ public record HealthcareProfessionalCreateRequestJson(
         String email,
         @NotNull(message = "A posição do profissional deve ser informada (MEDIC, NURSE, TECHNICAL)")
         HealthcareProfessionalPosition position,
+        @NotNull(message = "A unidade hospitalar deve ser informada")
+        Long healthcareFacilityId,
         @NotBlank(message = "A senha deve ser preenchida")
         String password){}

@@ -82,8 +82,23 @@ class HealthcareProfessionalIntegrationTest extends AbstractContainer {
                 .path("token");
 
         Assertions.assertNotNull(token);
-
         Header header = new Header("Authorization", token);
+
+        RestAssured
+                .given()
+                .contentType("application/json")
+                .header(header)
+                .body("""
+                        {
+                            "name": "Teste",
+                            "cnpj": "99607784000188"
+                        }
+                        """)
+                .when()
+                .post("/healthcare-facility/create")
+                .then()
+                .statusCode(201);
+
 
         RestAssured
                 .given()
@@ -95,6 +110,7 @@ class HealthcareProfessionalIntegrationTest extends AbstractContainer {
                             "lastName": "testee",
                             "email": "any1@any.com",
                             "position": "MEDIC",
+                            "healthcareFacilityId": 1,
                             "password": "anyAaaaad#123"
                         }
                         """)

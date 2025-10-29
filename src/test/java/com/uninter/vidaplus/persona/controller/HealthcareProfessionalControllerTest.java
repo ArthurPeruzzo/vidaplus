@@ -58,6 +58,7 @@ class HealthcareProfessionalControllerTest {
                   "lastName": "any-lastName",
                   "email": "email@email.com",
                   "position": "MEDIC",
+                  "healthcareFacilityId": 1,
                   "password": "password280b2054eb64"
                 }
                 """;

@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.database;
 
+import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
 import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.core.gateway.healthcareprofessional.HealthcareProfessionalGateway;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
@@ -27,9 +28,12 @@ public class HealthcareProfessionalDatabaseGateway implements HealthcareProfessi
     public void create(HealthcareProfessional healthcareProfessional) {
         try {
             UserEntity userEntityReference = entityManager.getReference(UserEntity.class, healthcareProfessional.getUserId());
+            HealthcareFacilityEntity healthcareFacilityReference = entityManager.getReference(HealthcareFacilityEntity.class, healthcareProfessional.getHealthcareFacilityId());
+
             HealthcareProfessionalEntity entity = new HealthcareProfessionalEntity(healthcareProfessional.getName(),
                     healthcareProfessional.getLastName(),
-                    healthcareProfessional.getPosition(), userEntityReference);
+                    healthcareProfessional.getPosition(),
+                    userEntityReference, healthcareFacilityReference);
 
             repository.save(entity);
         } catch (Exception e) {

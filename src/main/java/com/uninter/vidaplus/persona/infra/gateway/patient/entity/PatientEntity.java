@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.persona.infra.gateway.patient.entity;
 
+import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
 import com.uninter.vidaplus.persona.core.domain.enums.SexEnum;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
 import jakarta.persistence.*;
@@ -32,6 +33,10 @@ public class PatientEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private UserEntity user;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "healthcare_facility_id", referencedColumnName = "id")
+    private HealthcareFacilityEntity healthcareFacility;
 
     public PatientEntity(String name, String lastName, SexEnum sex, UserEntity userEntity) {
         this.name = name;

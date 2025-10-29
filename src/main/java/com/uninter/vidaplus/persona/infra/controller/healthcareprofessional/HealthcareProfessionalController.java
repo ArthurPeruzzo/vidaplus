@@ -24,6 +24,7 @@ public class HealthcareProfessionalController {
         HealthcareProfessionalCreateDto dto = new HealthcareProfessionalCreateDto(
                 requestJson.name(), requestJson.lastName(),
                 requestJson.email(),requestJson.position(),
+                requestJson.healthcareFacilityId(),
                 requestJson.password());
 
         createHealthcareProfessionalUseCase.create(dto);
