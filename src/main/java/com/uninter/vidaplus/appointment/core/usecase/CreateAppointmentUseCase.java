@@ -23,15 +23,12 @@ public class CreateAppointmentUseCase {
     private final PatientGateway patientGateway;
 
     public void create(CreateAppointmentDTO createAppointmentDTO) {
-
         Long userId = tokenGateway.getUserId();
         Patient patient = findPatientByUserId(userId);
         HealthcareFacility healthcareFacility = createHealthcareFacilityInstance(patient);
-
         HealthcareProfessional healthcareProfessional = new HealthcareProfessional(createAppointmentDTO.healthcareProfessionalId());
 
         Appointment appointment = new Appointment(createAppointmentDTO.date(), healthcareProfessional, patient, healthcareFacility, createAppointmentDTO.type());
-
         appointmentGateway.create(appointment);
     }
 
