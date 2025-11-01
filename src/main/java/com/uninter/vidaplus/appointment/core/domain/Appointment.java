@@ -6,12 +6,14 @@ import com.uninter.vidaplus.persona.core.domain.patient.Patient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @Getter
 public class Appointment {
     private Long id;
@@ -43,5 +45,9 @@ public class Appointment {
 
     public Long getPatientId() {
         return Optional.ofNullable(patient).map(Patient::getId).orElse(null);
+    }
+
+    public void cancelAppointment() {
+        this.status = AppointmentStatus.CANCELED;
     }
 }

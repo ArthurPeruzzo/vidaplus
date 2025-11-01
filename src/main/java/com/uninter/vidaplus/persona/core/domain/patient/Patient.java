@@ -8,16 +8,20 @@ public class Patient extends Persona {
 
     //TODO adicionar mais campos ao paciente
     @Getter
-    private final Long userId;
+    private Long userId;
     @Getter
-    private final SexEnum sex;
+    private SexEnum sex;
     @Getter
-    private final Long healthcareFacilityId;
+    private Long healthcareFacilityId;
 
     public Patient(Long id, Long userId, Long healthcareFacilityId, String name, String lastName, SexEnum sex, String email) {
         super(id, name, lastName, email);
         this.userId = userId;
         this.sex = sex;
         this.healthcareFacilityId = healthcareFacilityId;
+    }
+
+    public Patient(Long patientId) {
+        super(patientId);
     }
 }

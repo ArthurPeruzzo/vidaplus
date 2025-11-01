@@ -6,12 +6,10 @@ import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFa
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name="appointment")
@@ -25,6 +23,7 @@ public class AppointmentEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.STRING)
     private AppointmentStatus status;
@@ -50,4 +49,16 @@ public class AppointmentEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private PatientEntity patient;
+
+    public Long getHealthcareFacilityId() {
+        return Optional.ofNullable(healthcareFacility).map(HealthcareFacilityEntity::getId).orElse(null);
+    }
+
+    public Long getHealthcareProfessionalId() {
+        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getId).orElse(null);
+    }
+
+    public Long getPatientId() {
+        return Optional.ofNullable(patient).map(PatientEntity::getId).orElse(null);
+    }
 }

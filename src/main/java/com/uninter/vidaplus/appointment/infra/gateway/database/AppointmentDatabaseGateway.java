@@ -5,13 +5,18 @@ import com.uninter.vidaplus.appointment.core.exception.ErrorAccessDatabaseExcept
 import com.uninter.vidaplus.appointment.core.gateway.AppointmentGateway;
 import com.uninter.vidaplus.appointment.infra.gateway.entity.AppointmentEntity;
 import com.uninter.vidaplus.appointment.infra.gateway.repository.AppointmentRepository;
+import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
+import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
+import com.uninter.vidaplus.persona.core.domain.patient.Patient;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -38,6 +43,40 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
             appointmentRepository.save(appointmentEntity);
         } catch (Exception e) {
             log.error("Erro ao salvar consulta", e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    public Optional<Appointment> findById(Long appointmentId) {
+        try {
+            return appointmentRepository.findById(appointmentId)
+                    .map(entity -> new Appointment(
+                            entity.getId(),
+                            entity.getDate(),
+                            entity.getDateCreated(),
+                            new HealthcareProfessional(entity.getHealthcareProfessionalId()),
+                            new Patient(entity.getPatientId()),
+                            new HealthcareFacility(entity.getHealthcareFacilityId()),
+                            entity.getStatus(),
+                            entity.getType()
+
+                    ));
+        } catch (Exception e) {
+            log.error("Erro ao buscar consulta por id={}", appointmentId, e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    @Transactional
+    public void update(Appointment appointment) {
+        try {
+            AppointmentEntity entity = appointmentRepository.findById(appointment.getId()).orElseThrow();
+            entity.setStatus(appointment.getStatus());
+            appointmentRepository.save(entity);
+        } catch (Exception e) {
+            log.error("Erro ao atualizar consulta ={}", appointment, e);
             throw new ErrorAccessDatabaseException();
         }
     }
