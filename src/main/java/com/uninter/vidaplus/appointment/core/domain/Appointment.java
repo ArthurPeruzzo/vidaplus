@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.appointment.core.domain;
 
+import com.uninter.vidaplus.appointment.core.exception.AppointmentDataViolationException;
 import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.core.domain.patient.Patient;
@@ -8,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -26,13 +28,29 @@ public class Appointment {
     private AppointmentType type;
 
     public Appointment(LocalDateTime date, HealthcareProfessional healthcareProfessional, Patient patient, HealthcareFacility healthcareFacility, AppointmentType type) {
-        this.date = date; //Validar se a data passada eh futura a data de criacao dateCreated
-        this.dateCreated = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
+
+        validateDate(date, now);
+
+        this.date = date;
+        this.dateCreated = now;
         this.healthcareProfessional = healthcareProfessional;
         this.patient = patient;
         this.healthcareFacility = healthcareFacility;
         this.status = AppointmentStatus.SCHEDULED;
         this.type = type;
+    }
+
+    private static void validateDate(LocalDateTime date, LocalDateTime now) {
+        if (date.isBefore(now.plusDays(1))) {
+            throw new AppointmentDataViolationException("A data do agendamento deve ter pelo menos 1 dia de antecedência");
+        }
+
+        DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+        if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
+            throw new AppointmentDataViolationException("Agendamentos não podem ocorrer em finais de semana");
+        }
     }
 
     public Long getHealthcareFacilityId() {
