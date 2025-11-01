@@ -45,4 +45,8 @@ public class HealthcareProfessionalEntity {
         this.position = position;
         this.healthcareFacility = healthcareFacility;
     }
+
+    public HealthcareProfessionalEntity(Long healthcareProfessionalId) {
+        this.id = healthcareProfessionalId;
+    }
 }

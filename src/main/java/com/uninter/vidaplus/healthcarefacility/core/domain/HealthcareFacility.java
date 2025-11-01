@@ -16,4 +16,8 @@ public class HealthcareFacility {
         this.name = name;
         this.cnpj = new Cnpj(cnpj);
     }
+
+    public HealthcareFacility(Long healthcareFacilityId) {
+        this.id = healthcareFacilityId;
+    }
 }

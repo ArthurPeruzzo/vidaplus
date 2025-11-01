@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Entity
 @Table(name="patient")
 @Builder
@@ -44,5 +46,21 @@ public class PatientEntity {
         this.user = userEntity;
         this.sex = sex;
         this.healthcareFacility = healthcareFacility;
+    }
+
+    public PatientEntity(Long patientId) {
+        this.id = patientId;
+    }
+
+    public Long getUserId() {
+        return Optional.of(user).map(UserEntity::getId).orElse(null);
+    }
+
+    public Long getHealthcareFacilityId() {
+        return Optional.of(healthcareFacility).map(HealthcareFacilityEntity::getId).orElse(null);
+    }
+
+    public String getEmail() {
+        return Optional.of(user).map(UserEntity::getEmail).orElse(null);
     }
 }

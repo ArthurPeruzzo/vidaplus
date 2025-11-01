@@ -28,7 +28,7 @@ public class HealthcareProfessionalDatabaseGateway implements HealthcareProfessi
     public void create(HealthcareProfessional healthcareProfessional) {
         try {
             UserEntity userEntityReference = entityManager.getReference(UserEntity.class, healthcareProfessional.getUserId());
-            HealthcareFacilityEntity healthcareFacilityReference = entityManager.getReference(HealthcareFacilityEntity.class, healthcareProfessional.getHealthcareFacilityId());
+            HealthcareFacilityEntity healthcareFacilityReference = new HealthcareFacilityEntity(healthcareProfessional.getHealthcareFacilityId());
 
             HealthcareProfessionalEntity entity = new HealthcareProfessionalEntity(healthcareProfessional.getName(),
                     healthcareProfessional.getLastName(),

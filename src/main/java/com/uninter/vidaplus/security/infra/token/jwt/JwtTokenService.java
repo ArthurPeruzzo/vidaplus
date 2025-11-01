@@ -61,6 +61,16 @@ public class JwtTokenService implements TokenGateway {
         }
     }
 
+    @Override
+    public Long getUserId() {
+        try {
+            return Long.parseLong(decodeToken(getAuthorization()).getSubject());
+        } catch (JWTVerificationException ex) {
+            log.warn("Falha ao verificar JWT: {}", ex.getMessage());
+            throw new JWTVerificationException("Token inválido ou expirado.", ex);
+        }
+    }
+
     public DecodedJWT decodeToken(String token) {
         try {
             return JWT.require(algorithm)

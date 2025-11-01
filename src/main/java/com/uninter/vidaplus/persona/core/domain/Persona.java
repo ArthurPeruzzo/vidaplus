@@ -17,6 +17,10 @@ public abstract class Persona {
         this.email = email;
     }
 
+    protected Persona(Long id) {
+        this.id = id;
+    }
+
     protected String getFullName() {
         return name + " " + lastName;
     }

@@ -6,16 +6,20 @@ import lombok.Getter;
 
 public class HealthcareProfessional extends Persona {
     @Getter
-    private final HealthcareProfessionalPosition position;
+    private HealthcareProfessionalPosition position;
     @Getter
-    private final Long userId;
+    private Long userId;
     @Getter
-    private final Long healthcareFacilityId;
+    private Long healthcareFacilityId;
 
     public HealthcareProfessional(Long id, Long userId, Long healthcareFacilityId, String name, String lastName, HealthcareProfessionalPosition position, String email) {
         super(id, name, lastName, email);
         this.userId = userId;
         this.position = position;
         this.healthcareFacilityId = healthcareFacilityId;
+    }
+
+    public HealthcareProfessional(Long id) {
+        super(id);
     }
 }

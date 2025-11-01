@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -28,12 +30,31 @@ public class PatientDatabaseGateway implements PatientGateway {
     public void create(Patient patient) {
         try {
             UserEntity userEntityReference = entityManager.getReference(UserEntity.class, patient.getUserId());
-            HealthcareFacilityEntity healthcareFacilityReference = entityManager.getReference(HealthcareFacilityEntity.class, patient.getHealthcareFacilityId());
+            HealthcareFacilityEntity healthcareFacilityReference = new HealthcareFacilityEntity(patient.getHealthcareFacilityId());
 
             PatientEntity entity = new PatientEntity(patient.getName(), patient.getLastName(), patient.getSex(), userEntityReference, healthcareFacilityReference);
             patientRepository.save(entity);
         } catch (Exception e) {
             log.error("Erro ao salvar paciente", e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    public Optional<Patient> findByUserId(Long userId) {
+        try {
+            return patientRepository.findByUser_Id(userId)
+                    .map(entity ->
+                            new Patient(
+                                    entity.getId(),
+                                    entity.getUserId(),
+                                    entity.getHealthcareFacilityId(),
+                                    entity.getName(),
+                                    entity.getLastName(),
+                                    entity.getSex(),
+                                    entity.getEmail()));
+        } catch (Exception e) {
+            log.error("Erro ao buscar paciente por userId={}", userId, e);
             throw new ErrorAccessDatabaseException();
         }
     }

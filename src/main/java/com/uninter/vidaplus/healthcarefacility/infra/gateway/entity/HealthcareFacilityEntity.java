@@ -22,4 +22,8 @@ public class HealthcareFacilityEntity {
 
     @Column(name = "cnpj", nullable = false, unique = true)
     private String cnpj;
+
+    public HealthcareFacilityEntity(Long healthcareFacilityId) {
+        this.id = healthcareFacilityId;
+    }
 }
