@@ -95,7 +95,7 @@ class HealthcareProfessionalIntegrationTest extends AbstractContainer {
                         }
                         """)
                 .when()
-                .post("/healthcare-facility/create")
+                .post("/healthcare-facilities")
                 .then()
                 .statusCode(201);
 
@@ -115,7 +115,7 @@ class HealthcareProfessionalIntegrationTest extends AbstractContainer {
                         }
                         """)
                 .when()
-                .post("/healthcare-professional/create")
+                .post("/healthcare-professionals")
                 .then()
                 .statusCode(201);
 

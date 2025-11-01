@@ -96,7 +96,7 @@ class PatientIntegrationTest extends AbstractContainer {
                         }
                         """)
                 .when()
-                .post("/healthcare-facility/create")
+                .post("/healthcare-facilities")
                 .then()
                 .statusCode(201);
 
@@ -115,7 +115,7 @@ class PatientIntegrationTest extends AbstractContainer {
                         }
                         """)
                 .when()
-                .post("/patient/create")
+                .post("/patients")
                 .then()
                 .statusCode(201);
 

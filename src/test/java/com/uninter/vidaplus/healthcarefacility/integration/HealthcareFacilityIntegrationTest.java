@@ -96,7 +96,7 @@ class HealthcareFacilityIntegrationTest extends AbstractContainer {
                         }
                         """)
                 .when()
-                .post("/healthcare-facility/create")
+                .post("/healthcare-facilities")
                 .then()
                 .statusCode(201);
 

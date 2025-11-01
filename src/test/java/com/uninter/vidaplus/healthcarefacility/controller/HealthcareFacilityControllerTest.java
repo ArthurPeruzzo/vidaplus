@@ -38,7 +38,7 @@ class HealthcareFacilityControllerTest {
             "'{\"name\":\"Teste\",\"cnpj\":\"996077840001\"}', cnpj, 'O formato do cnpj não é válido. Deve ser seguido o seguinte formato de exemplo: 00.000.000/0000-00 ou sem formatação'"
     })
     void shouldReturn400WithValidationMessage(String requestJson, String field, String expectedMessage) throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-facility/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-facilities")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -56,7 +56,7 @@ class HealthcareFacilityControllerTest {
                 }
                 """;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-facility/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-facilities")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is2xxSuccessful());

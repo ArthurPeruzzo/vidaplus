@@ -27,11 +27,11 @@ public class SecurityConfiguration {
             "/authenticate/login",
     };
 
-    protected static final String [] ENDPOINTS_ADMIN = { //Retirar o /create dos endpoints
-            "/administrator/create",
-            "/patient/create",
-            "/healthcare-professional/create",
-            "/healthcare-facility/create"
+    protected static final String [] ENDPOINTS_ADMIN = {
+            "/administrators",
+            "/patients",
+            "/healthcare-professionals",
+            "/healthcare-facilities"
     };
 
     protected static final String [] ENDPOINTS_PATIENT = {

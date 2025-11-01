@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/patient")
+@RequestMapping(value = "/patients")
 public class PatientController {
 
     private final CreatePatientUseCase createPatientUseCase;
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid PatientCreateRequestJson requestJson) {
         PatientCreateDto dto = new PatientCreateDto(
                 requestJson.name(), requestJson.lastName(),

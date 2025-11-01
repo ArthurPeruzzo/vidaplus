@@ -41,7 +41,7 @@ class PatientControllerTest {
             "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"123456\"}', sex, 'O sexo deve ser informado (FEMALE/MALE)'",
     })
     void shouldReturn400WithValidationMessage(String requestJson, String field, String expectedMessage) throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/patient/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/patients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -63,7 +63,7 @@ class PatientControllerTest {
                 }
                 """;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/patient/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/patients")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is2xxSuccessful());

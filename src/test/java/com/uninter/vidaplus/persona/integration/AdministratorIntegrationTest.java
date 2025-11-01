@@ -98,7 +98,7 @@ class AdministratorIntegrationTest extends AbstractContainer {
                         }
                         """)
                 .when()
-                .post("/administrator/create")
+                .post("/administrators")
                 .then()
                 .statusCode(201);
 

@@ -41,7 +41,7 @@ class HealthcareProfessionalControllerTest {
             "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"123456\"}', position, 'A posição do profissional deve ser informada (MEDIC, NURSE, TECHNICAL)'",
     })
     void shouldReturn400WithValidationMessage(String requestJson, String field, String expectedMessage) throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-professional/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-professionals")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -63,7 +63,7 @@ class HealthcareProfessionalControllerTest {
                 }
                 """;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-professional/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-professionals")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is2xxSuccessful());
