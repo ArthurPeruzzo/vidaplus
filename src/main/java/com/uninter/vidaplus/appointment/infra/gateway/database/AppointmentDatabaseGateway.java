@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -77,6 +79,29 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
             appointmentRepository.save(entity);
         } catch (Exception e) {
             log.error("Erro ao atualizar consulta ={}", appointment, e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    public List<Appointment> findByHealthcareProfessionalIdOrPatientIdAndDate(Long healthcareProfessionalId, Long patientId,
+                                                                              LocalDateTime startDate, LocalDateTime endDate) {
+        try {
+            return appointmentRepository
+                    .findByHealthcareProfessionalIdOrPatientIdAndDate(startDate, endDate, healthcareProfessionalId, patientId)
+                    .stream().map(entity -> new Appointment(
+                            entity.getId(),
+                            entity.getDate(),
+                            entity.getDateCreated(),
+                            new HealthcareProfessional(entity.getHealthcareProfessionalId()),
+                            new Patient(entity.getPatientId()),
+                            new HealthcareFacility(entity.getHealthcareFacilityId()),
+                            entity.getStatus(),
+                            entity.getType()
+
+                    )).toList();
+        } catch (Exception e) {
+            log.error("Erro ao buscar consulta healthcareProfessionalId={}, startDate={}, endDate={}", healthcareProfessionalId, startDate, endDate, e);
             throw new ErrorAccessDatabaseException();
         }
     }

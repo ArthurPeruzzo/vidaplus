@@ -1,6 +1,6 @@
 package com.uninter.vidaplus.appointment.core.domain;
 
-import com.uninter.vidaplus.appointment.core.exception.AppointmentDataViolationException;
+import com.uninter.vidaplus.appointment.core.exception.AppointmentDateViolationException;
 import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.core.domain.patient.Patient;
@@ -43,13 +43,19 @@ public class Appointment {
 
     private static void validateDate(LocalDateTime date, LocalDateTime now) {
         if (date.isBefore(now.plusDays(1))) {
-            throw new AppointmentDataViolationException("A data do agendamento deve ter pelo menos 1 dia de antecedência");
+            throw new AppointmentDateViolationException("A data do agendamento deve ter pelo menos 1 dia de antecedência");
         }
 
         DayOfWeek dayOfWeek = date.getDayOfWeek();
 
         if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-            throw new AppointmentDataViolationException("Agendamentos não podem ocorrer em finais de semana");
+            throw new AppointmentDateViolationException("Agendamentos não podem ocorrer em finais de semana");
+        }
+
+        int hour = date.getHour();
+
+        if (hour < 8 || hour >= 18) {
+            throw new AppointmentDateViolationException("Agendamentos só podem ocorrer em horários entre 08:00 e 18:00");
         }
     }
 

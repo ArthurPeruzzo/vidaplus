@@ -1,6 +1,8 @@
 package com.uninter.vidaplus.appointment.core.usecase;
 
 import com.uninter.vidaplus.appointment.core.domain.Appointment;
+import com.uninter.vidaplus.appointment.core.domain.rule.ValidateAppointmentsScheduled;
+import com.uninter.vidaplus.appointment.core.domain.rule.dto.InputValidateAppointmentScheduled;
 import com.uninter.vidaplus.appointment.core.exception.PatientNotFoundAppointmentException;
 import com.uninter.vidaplus.appointment.core.gateway.AppointmentGateway;
 import com.uninter.vidaplus.appointment.infra.controller.dto.CreateAppointmentDTO;
@@ -21,14 +23,21 @@ public class CreateAppointmentUseCase {
     private final AppointmentGateway appointmentGateway;
     private final TokenGateway tokenGateway;
     private final PatientGateway patientGateway;
+    private final ValidateAppointmentsScheduled validateAppointmentsScheduled;
 
     public void create(CreateAppointmentDTO createAppointmentDTO) {
         Long userId = tokenGateway.getUserId();
         Patient patient = findPatientByUserId(userId);
         HealthcareFacility healthcareFacility = createHealthcareFacilityInstance(patient);
-        HealthcareProfessional healthcareProfessional = new HealthcareProfessional(createAppointmentDTO.healthcareProfessionalId());
+
+        Long healthcareProfessionalId = createAppointmentDTO.healthcareProfessionalId();
+        HealthcareProfessional healthcareProfessional = new HealthcareProfessional(healthcareProfessionalId);
 
         Appointment appointment = new Appointment(createAppointmentDTO.date(), healthcareProfessional, patient, healthcareFacility, createAppointmentDTO.type());
+
+        InputValidateAppointmentScheduled input = new InputValidateAppointmentScheduled(createAppointmentDTO, healthcareProfessionalId, patient.getId());
+        validateAppointmentsScheduled.execute(input);
+
         appointmentGateway.create(appointment);
     }
 
