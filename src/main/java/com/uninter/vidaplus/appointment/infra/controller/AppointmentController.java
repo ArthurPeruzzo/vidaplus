@@ -28,7 +28,6 @@ public class AppointmentController {
         CreateAppointmentDTO createAppointmentDTO = new CreateAppointmentDTO(requestJson.date(), requestJson.healthcareProfessionalId(), requestJson.type());
 
         createAppointmentUseCase.create(createAppointmentDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
@@ -38,7 +37,6 @@ public class AppointmentController {
         CancelAppointmentDTO cancelAppointmentDTO = new CancelAppointmentDTO(requestJson.appointmentId());
 
         cancelAppointmentUseCase.cancel(cancelAppointmentDTO);
-
         return ResponseEntity.status(HttpStatus.OK).build();
 
     }
