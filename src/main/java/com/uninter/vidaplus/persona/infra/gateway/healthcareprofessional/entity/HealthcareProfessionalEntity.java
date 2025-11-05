@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Optional;
+
 @Entity
 @Table(name="healthcare_professional")
 @Builder
@@ -48,5 +50,9 @@ public class HealthcareProfessionalEntity {
 
     public HealthcareProfessionalEntity(Long healthcareProfessionalId) {
         this.id = healthcareProfessionalId;
+    }
+
+    public Long getUserId() {
+        return Optional.of(user).map(UserEntity::getId).orElse(null);
     }
 }

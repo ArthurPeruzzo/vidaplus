@@ -34,15 +34,15 @@ public class SecurityConfiguration {
             "/healthcare-facilities"
     };
 
-
-    protected static final String [] ENDPOINTS_APPOINTMENTS = {
+    protected static final String[] ENDPOINTS_PATIENT = {
             "/appointments",
             "/appointments/cancel"
     };
 
-    protected static final String [] ENDPOINTS_PATIENT = {};
+    protected static final String[] ENDPOINTS_HEALTHCARE_PROFESSIONAL = {
+            "/appointments/cancel"
+    };
 
-    protected static final String [] ENDPOINTS_HEALTHCARE_PROFESSIONAL = {};
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -51,7 +51,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
                                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
-                                .requestMatchers(ENDPOINTS_APPOINTMENTS).hasAnyRole("PATIENT", "HEALTHCARE_PROFESSIONAL")
+                                .requestMatchers(ENDPOINTS_HEALTHCARE_PROFESSIONAL).hasRole("HEALTHCARE_PROFESSIONAL")
+                                .requestMatchers(ENDPOINTS_PATIENT).hasRole("PATIENT")
                                 .anyRequest().denyAll()
                 ).exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) -> {

@@ -58,7 +58,15 @@ public class AppointmentEntity {
         return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getId).orElse(null);
     }
 
+    public Long getHealthcareProfessionalUserId() {
+        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getUserId).orElse(null);
+    }
+
     public Long getPatientId() {
         return Optional.ofNullable(patient).map(PatientEntity::getId).orElse(null);
+    }
+
+    public Long getPatientUserId() {
+        return Optional.ofNullable(patient).map(PatientEntity::getUserId).orElse(null);
     }
 }

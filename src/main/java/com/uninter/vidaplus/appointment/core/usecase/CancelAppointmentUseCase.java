@@ -1,6 +1,8 @@
 package com.uninter.vidaplus.appointment.core.usecase;
 
 import com.uninter.vidaplus.appointment.core.domain.Appointment;
+import com.uninter.vidaplus.appointment.core.domain.rule.ValidateAppointmentsCanceled;
+import com.uninter.vidaplus.appointment.core.domain.rule.dto.InputValidateAppointmentCanceled;
 import com.uninter.vidaplus.appointment.core.exception.AppointmentNotFoundException;
 import com.uninter.vidaplus.appointment.core.gateway.AppointmentGateway;
 import com.uninter.vidaplus.appointment.infra.controller.dto.CancelAppointmentDTO;
@@ -14,14 +16,17 @@ import org.springframework.stereotype.Service;
 public class CancelAppointmentUseCase {
 
     private final AppointmentGateway appointmentGateway;
+    private final ValidateAppointmentsCanceled validateAppointmentsCanceled;
 
     public void cancel(CancelAppointmentDTO cancelAppointmentDTO) {
-
         Long appointmentId = cancelAppointmentDTO.appointmentId();
-
         Appointment appointment = findAppointmentById(appointmentId);
-        appointment.cancelAppointment();
 
+        var input = new InputValidateAppointmentCanceled(appointment);
+
+        validateAppointmentsCanceled.execute(input);
+
+        appointment.cancelAppointment();
         appointmentGateway.update(appointment);
 
     }

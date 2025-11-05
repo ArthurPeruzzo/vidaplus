@@ -57,8 +57,8 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
                             entity.getId(),
                             entity.getDate(),
                             entity.getDateCreated(),
-                            new HealthcareProfessional(entity.getHealthcareProfessionalId()),
-                            new Patient(entity.getPatientId()),
+                            new HealthcareProfessional(entity.getHealthcareProfessionalId(), entity.getHealthcareProfessionalUserId()),
+                            new Patient(entity.getPatientId(), entity.getPatientUserId()),
                             new HealthcareFacility(entity.getHealthcareFacilityId()),
                             entity.getStatus(),
                             entity.getType()

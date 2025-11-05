@@ -24,4 +24,9 @@ public class Patient extends Persona {
     public Patient(Long patientId) {
         super(patientId);
     }
+
+    public Patient(Long patientId, Long userId) {
+        super(patientId);
+        this.userId = userId;
+    }
 }

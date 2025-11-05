@@ -22,4 +22,10 @@ public class HealthcareProfessional extends Persona {
     public HealthcareProfessional(Long id) {
         super(id);
     }
+
+    public HealthcareProfessional(Long id, Long userId) {
+        super(id);
+        this.userId = userId;
+    }
+
 }
