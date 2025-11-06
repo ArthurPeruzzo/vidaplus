@@ -54,6 +54,10 @@ public class AppointmentEntity {
         return Optional.ofNullable(healthcareFacility).map(HealthcareFacilityEntity::getId).orElse(null);
     }
 
+    public String getHealthcareFacilityName() {
+        return Optional.ofNullable(healthcareFacility).map(HealthcareFacilityEntity::getName).orElse(null);
+    }
+
     public Long getHealthcareProfessionalId() {
         return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getId).orElse(null);
     }
@@ -62,11 +66,19 @@ public class AppointmentEntity {
         return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getUserId).orElse(null);
     }
 
+    public String getHealthcareProfessionalName() {
+        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getName).orElse(null);
+    }
+
     public Long getPatientId() {
         return Optional.ofNullable(patient).map(PatientEntity::getId).orElse(null);
     }
 
     public Long getPatientUserId() {
         return Optional.ofNullable(patient).map(PatientEntity::getUserId).orElse(null);
+    }
+
+    public String getPatientName() {
+        return Optional.ofNullable(patient).map(PatientEntity::getName).orElse(null);
     }
 }

@@ -63,12 +63,24 @@ public class Appointment {
         return Optional.ofNullable(healthcareFacility).map(HealthcareFacility::getId).orElse(null);
     }
 
+    public String getHealthcareFacilityName() {
+        return Optional.ofNullable(healthcareFacility).map(HealthcareFacility::getName).orElse(null);
+    }
+
     public Long getHealthcareProfessionalId() {
         return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessional::getId).orElse(null);
     }
 
+    public String getHealthcareProfessionalName() {
+        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessional::getName).orElse(null);
+    }
+
     public Long getPatientId() {
         return Optional.ofNullable(patient).map(Patient::getId).orElse(null);
+    }
+
+    public String getPatientName() {
+        return Optional.ofNullable(patient).map(Patient::getName).orElse(null);
     }
 
     public void cancelAppointment() {

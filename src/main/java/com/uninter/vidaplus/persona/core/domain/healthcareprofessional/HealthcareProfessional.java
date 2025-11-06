@@ -28,4 +28,9 @@ public class HealthcareProfessional extends Persona {
         this.userId = userId;
     }
 
+    public HealthcareProfessional(Long id, Long userId, String name) {
+        super(id, name);
+        this.userId = userId;
+    }
+
 }

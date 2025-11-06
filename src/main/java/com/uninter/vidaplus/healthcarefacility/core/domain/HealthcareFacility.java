@@ -20,4 +20,9 @@ public class HealthcareFacility {
     public HealthcareFacility(Long healthcareFacilityId) {
         this.id = healthcareFacilityId;
     }
+
+    public HealthcareFacility(Long healthcareFacilityId, String name) {
+        this.id = healthcareFacilityId;
+        this.name = name;
+    }
 }

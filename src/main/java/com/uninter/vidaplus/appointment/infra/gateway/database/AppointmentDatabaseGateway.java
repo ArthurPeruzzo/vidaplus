@@ -3,6 +3,7 @@ package com.uninter.vidaplus.appointment.infra.gateway.database;
 import com.uninter.vidaplus.appointment.core.domain.Appointment;
 import com.uninter.vidaplus.appointment.core.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.appointment.core.gateway.AppointmentGateway;
+import com.uninter.vidaplus.appointment.infra.controller.dto.FilterParamsDTO;
 import com.uninter.vidaplus.appointment.infra.gateway.entity.AppointmentEntity;
 import com.uninter.vidaplus.appointment.infra.gateway.repository.AppointmentRepository;
 import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
@@ -13,6 +14,9 @@ import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,6 +106,31 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
                     )).toList();
         } catch (Exception e) {
             log.error("Erro ao buscar consulta healthcareProfessionalId={}, startDate={}, endDate={}", healthcareProfessionalId, startDate, endDate, e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    public Page<Appointment> findAllPatientAppointmentByUserId(Long userId, FilterParamsDTO params) {
+        try {
+            Pageable pageable = PageRequest.of(params.page(), params.pageSize());
+            return appointmentRepository.findByPatient_User_Id(userId, pageable)
+                    .map(entity -> new Appointment(
+                    entity.getId(),
+                    entity.getDate(),
+                    entity.getDateCreated(),
+                    new HealthcareProfessional(
+                            entity.getHealthcareProfessionalId(),
+                            entity.getHealthcareProfessionalUserId(),
+                            entity.getHealthcareProfessionalName()),
+                    new Patient(entity.getPatientId(), entity.getPatientUserId(), entity.getPatientName()),
+                    new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()),
+                    entity.getStatus(),
+                    entity.getType()
+
+            ));
+        } catch (Exception e) {
+            log.error("Erro ao buscar consultas paginadas", e);
             throw new ErrorAccessDatabaseException();
         }
     }

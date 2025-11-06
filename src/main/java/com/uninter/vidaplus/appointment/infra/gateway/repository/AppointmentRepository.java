@@ -1,6 +1,8 @@
 package com.uninter.vidaplus.appointment.infra.gateway.repository;
 
 import com.uninter.vidaplus.appointment.infra.gateway.entity.AppointmentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -25,4 +27,7 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
                                                                              @Param("endDate") LocalDateTime endDate,
                                                                              @Param("healthcareProfessionalId") Long healthcareProfessionalId,
                                                                              @Param("patientId") Long patientId);
+
+    Page<AppointmentEntity> findByPatient_User_Id(Long id, Pageable pageable);
+
 }
