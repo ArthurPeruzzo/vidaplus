@@ -38,15 +38,15 @@ public class AppointmentEntity {
     @Column(name = "date_created", nullable = false)
     private LocalDateTime dateCreated;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healthcare_facility_id", referencedColumnName = "id")
     private HealthcareFacilityEntity healthcareFacility;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "healthcare_professional_id", referencedColumnName = "id")
     private HealthcareProfessionalEntity healthcareProfessional;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private PatientEntity patient;
 
