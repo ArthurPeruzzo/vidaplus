@@ -55,4 +55,12 @@ public class HealthcareProfessionalEntity {
     public Long getUserId() {
         return Optional.of(user).map(UserEntity::getId).orElse(null);
     }
+
+    public Long getHealthcareFacilityId() {
+        return Optional.ofNullable(healthcareFacility).map(HealthcareFacilityEntity::getId).orElse(null);
+    }
+
+    public String getEmail() {
+        return Optional.of(user).map(UserEntity::getEmail).orElse(null);
+    }
 }

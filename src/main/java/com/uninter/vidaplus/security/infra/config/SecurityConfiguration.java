@@ -40,7 +40,8 @@ public class SecurityConfiguration {
     };
 
     protected static final String[] ENDPOINTS_HEALTHCARE_PROFESSIONAL = {
-            "/appointments/cancel"
+            "/appointments/cancel",
+            "/time-slots"
     };
 
 

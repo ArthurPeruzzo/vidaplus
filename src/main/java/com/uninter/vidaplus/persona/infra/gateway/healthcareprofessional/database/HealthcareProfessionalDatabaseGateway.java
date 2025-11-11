@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Component
 @Slf4j
 @RequiredArgsConstructor
@@ -36,6 +38,25 @@ public class HealthcareProfessionalDatabaseGateway implements HealthcareProfessi
                     userEntityReference, healthcareFacilityReference);
 
             repository.save(entity);
+        } catch (Exception e) {
+            log.error("Erro ao salvar Profissional da saude", e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    public Optional<HealthcareProfessional> findByUserId(Long userId) {
+        try {
+            return repository.findByUser_Id(userId).map(entity ->
+                    new HealthcareProfessional(
+                            entity.getId(),
+                            entity.getUserId(),
+                            entity.getHealthcareFacilityId(),
+                            entity.getName(),
+                            entity.getLastName(),
+                            entity.getPosition(),
+                            entity.getEmail())
+                            );
         } catch (Exception e) {
             log.error("Erro ao salvar Profissional da saude", e);
             throw new ErrorAccessDatabaseException();
