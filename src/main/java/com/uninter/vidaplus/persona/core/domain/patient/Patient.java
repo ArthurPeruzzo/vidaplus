@@ -6,7 +6,6 @@ import lombok.Getter;
 
 public class Patient extends Persona {
 
-    //TODO adicionar mais campos ao paciente
     @Getter
     private Long userId;
     @Getter

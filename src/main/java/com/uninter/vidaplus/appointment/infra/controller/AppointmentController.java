@@ -37,7 +37,6 @@ public class AppointmentController {
 
     }
 
-    //TODO rever o cancelamento
     @PostMapping("/cancel")
     public ResponseEntity<HttpStatus> cancel(@RequestBody @Valid CancelAppointmentRequestJson requestJson) {
         CancelAppointmentDTO cancelAppointmentDTO = new CancelAppointmentDTO(requestJson.appointmentId());
