@@ -35,13 +35,15 @@ public class SecurityConfiguration {
     };
 
     protected static final String[] ENDPOINTS_PATIENT = {
-            "/appointments",
-            "/appointments/cancel"
+            "/appointments"
     };
 
     protected static final String[] ENDPOINTS_HEALTHCARE_PROFESSIONAL = {
-            "/appointments/cancel",
             "/time-slots"
+    };
+
+    protected static final String[] ENDPOINTS_APPOINTMENTS = {
+            "/appointments/cancel"
     };
 
 
@@ -54,6 +56,7 @@ public class SecurityConfiguration {
                                 .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
                                 .requestMatchers(ENDPOINTS_HEALTHCARE_PROFESSIONAL).hasRole("HEALTHCARE_PROFESSIONAL")
                                 .requestMatchers(ENDPOINTS_PATIENT).hasRole("PATIENT")
+                                .requestMatchers(ENDPOINTS_APPOINTMENTS).hasAnyRole("HEALTHCARE_PROFESSIONAL", "PATIENT")
                                 .anyRequest().denyAll()
                 ).exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) -> {

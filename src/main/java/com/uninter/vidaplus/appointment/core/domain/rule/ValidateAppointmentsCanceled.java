@@ -16,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -50,11 +52,25 @@ public class ValidateAppointmentsCanceled extends BaseRule {
     }
 
     private static void validateDate(Appointment appointment) {
-        LocalDateTime date = appointment.getDate();
-        if (LocalDateTime.now().isAfter(date)) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-            log.warn("Não é possível cancelar a consulta de id {}, pois a data da consulta já expirou", appointment.getId());
-            throw new AppointmentDateViolationException("Não é possível cancelar a consulta pois a data já expirou - " + date.format(formatter));
+        LocalDate date = appointment.getAppointmentDay();
+        LocalTime startTime = appointment.getStartTimeTimeSlot();
+        LocalDate today = LocalDate.now();
+        LocalTime nowTime = LocalTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        if (today.isAfter(date)) {
+            log.warn("Não é possível cancelar a consulta de id {}, pois a data já expirou", appointment.getId());
+            throw new AppointmentDateViolationException(
+                    "Não é possível cancelar a consulta pois já ocorreu em " + date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+            );
+        }
+
+        if (today.isEqual(date) && (nowTime.isAfter(startTime) || nowTime.equals(startTime))) {
+            String formatted = LocalDateTime.of(date, startTime).format(formatter);
+            log.warn("Não é possível cancelar a consulta de id {}, pois já iniciou às {}", appointment.getId(), formatted);
+            throw new AppointmentDateViolationException(
+                    "Não é possível cancelar a consulta pois já iniciou às " + formatted
+            );
         }
     }
 
@@ -72,7 +88,7 @@ public class ValidateAppointmentsCanceled extends BaseRule {
             throw new AppointmentPersonaEligibleException("não é possível cancelar a consulta pois o paciente não está relacionado a consulta");
         }
 
-        if (roles.contains(RoleEnum.ROLE_HEALTHCARE_PROFESSIONAL) && !appointment.getHealthcareProfessional().getUserId().equals(userId)) {
+        if (roles.contains(RoleEnum.ROLE_HEALTHCARE_PROFESSIONAL) && !appointment.getHealthcareProfessionalUserId().equals(userId)) {
             log.warn("não é possível cancelar a consulta pois o profissional não está relacionado a consulta");
             throw new AppointmentPersonaEligibleException("não é possível cancelar a consulta pois o profissional não está relacionado a consulta");
         }

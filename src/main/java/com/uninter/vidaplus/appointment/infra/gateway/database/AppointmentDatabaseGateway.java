@@ -78,7 +78,8 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
                             entity.getType(),
                             new HealthcareProfessionalSchedule(
                                     new HealthcareProfessional(entity.getHealthcareProfessionalId(), entity.getHealthcareProfessionalUserId()),
-                                    new HealthcareFacility(entity.getHealthcareFacilityId()))
+                                    new HealthcareFacility(entity.getHealthcareFacilityId()),
+                                    new TimeSlot(entity.getDayOfWeekTimeSlot(), entity.getStartTimeTimeSlot(), entity.getEndTimeTimeSlot()))
                     ));
         } catch (Exception e) {
             log.error("Erro ao buscar consulta por id={}", appointmentId, e);
