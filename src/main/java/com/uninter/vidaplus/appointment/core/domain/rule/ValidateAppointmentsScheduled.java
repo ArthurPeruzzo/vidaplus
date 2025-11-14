@@ -13,8 +13,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Component
@@ -32,25 +35,24 @@ public class ValidateAppointmentsScheduled extends BaseRule {
         }
 
         CreateAppointmentDTO createAppointmentDTO = input.getCreateAppointmentDTO();
-
         LocalDateTime date = createAppointmentDTO.date();
-        LocalDateTime startDate = date.minusHours(1);
-        LocalDateTime endDate = date.plusHours(1);
+        LocalDate appointmentDay = date.toLocalDate();
+
+        LocalTime startTime = date.toLocalTime().truncatedTo(ChronoUnit.HOURS);
+        LocalTime endTime = startTime.plusHours(1);
 
         List<Appointment> appointments = appointmentGateway
-                .findByHealthcareProfessionalIdOrPatientIdAndDate(input.getHealthcareProfessionalId(), input.getPatientId(), startDate, endDate);
+                .findByHealthcareProfessionalIdOrPatientIdAndDate(input.getHealthcareProfessionalId(), input.getPatientId(), startTime, endTime, appointmentDay);
 
         if (appointments == null || appointments.isEmpty()) {
             return new VoidOutputDto();
         }
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        String startDateFormated = startDate.format(formatter);
-        String endDateFormated = endDate.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         log.warn("Ja existe consulta marcada no horario requisitado");
         throw new AppointmentDateViolationException("Não foi possível agendar a consulta, pois já existem compromissos marcados entre "
-                + startDateFormated + " e " + endDateFormated
+                + startTime + " e " + endTime + " do dia " + appointmentDay.format(formatter)
                 + ". Nesse intervalo, o profissional ou o paciente já possui uma consulta agendada. Escolha outro horário.");
 
     }

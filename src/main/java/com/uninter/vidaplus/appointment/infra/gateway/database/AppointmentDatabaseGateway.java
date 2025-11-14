@@ -12,6 +12,9 @@ import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.Healthcar
 import com.uninter.vidaplus.persona.core.domain.patient.Patient;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
+import com.uninter.vidaplus.schedule.core.domain.healthcareprofessional.HealthcareProfessionalSchedule;
+import com.uninter.vidaplus.schedule.infra.gateway.entity.HealthcareProfessionalScheduleEntity;
+import com.uninter.vidaplus.schedule.infra.gateway.entity.TimeSlotEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -20,7 +23,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,16 +39,12 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
     @Transactional
     public void create(Appointment appointment) {
         try {
-            Long healthcareFacilityId = appointment.getHealthcareFacilityId();
-            Long healthcareProfessionalId = appointment.getHealthcareProfessionalId();
             Long patientId = appointment.getPatientId();
-
-            HealthcareFacilityEntity healthcareFacilityEntity = new HealthcareFacilityEntity(healthcareFacilityId);
-            HealthcareProfessionalEntity healthcareProfessionalEntity = new HealthcareProfessionalEntity(healthcareProfessionalId);
             PatientEntity patientEntity = new PatientEntity(patientId);
+            HealthcareProfessionalScheduleEntity healthcareProfessionalScheduleEntity = getHealthcareProfessionalScheduleEntity(appointment);
 
             AppointmentEntity appointmentEntity = new AppointmentEntity(appointment.getId(), appointment.getStatus(), appointment.getType(),
-                    appointment.getDate(), appointment.getDateCreated(), healthcareFacilityEntity, healthcareProfessionalEntity, patientEntity);
+                    appointment.getAppointmentDay(), appointment.getDateCreated(), patientEntity, healthcareProfessionalScheduleEntity);
 
             appointmentRepository.save(appointmentEntity);
         } catch (Exception e) {
@@ -53,20 +53,31 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
         }
     }
 
+    private static HealthcareProfessionalScheduleEntity getHealthcareProfessionalScheduleEntity(Appointment appointment) {
+        HealthcareProfessionalSchedule healthcareProfessionalSchedule = appointment.getHealthcareProfessionalSchedule();
+        Long timeSlotId = healthcareProfessionalSchedule.getTimeSlotId();
+        TimeSlotEntity timeSlotEntity = new TimeSlotEntity(timeSlotId);
+
+        HealthcareFacilityEntity healthcareFacilityEntity = new HealthcareFacilityEntity(healthcareProfessionalSchedule.getHealthcareFacilityId());
+        HealthcareProfessionalEntity healthcareProfessionalEntity = new HealthcareProfessionalEntity(healthcareProfessionalSchedule.getHealthcareProfessionalId());
+
+        return new HealthcareProfessionalScheduleEntity(healthcareProfessionalSchedule.getId(), healthcareProfessionalEntity, healthcareFacilityEntity, timeSlotEntity);
+    }
+
     @Override
     public Optional<Appointment> findById(Long appointmentId) {
         try {
             return appointmentRepository.findById(appointmentId)
                     .map(entity -> new Appointment(
                             entity.getId(),
-                            entity.getDate(),
+                            entity.getAppointmentDay(),
                             entity.getDateCreated(),
-                            new HealthcareProfessional(entity.getHealthcareProfessionalId(), entity.getHealthcareProfessionalUserId()),
                             new Patient(entity.getPatientId(), entity.getPatientUserId()),
-                            new HealthcareFacility(entity.getHealthcareFacilityId()),
                             entity.getStatus(),
-                            entity.getType()
-
+                            entity.getType(),
+                            new HealthcareProfessionalSchedule(
+                                    new HealthcareProfessional(entity.getHealthcareProfessionalId(), entity.getHealthcareProfessionalUserId()),
+                                    new HealthcareFacility(entity.getHealthcareFacilityId()))
                     ));
         } catch (Exception e) {
             log.error("Erro ao buscar consulta por id={}", appointmentId, e);
@@ -89,23 +100,25 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
 
     @Override
     public List<Appointment> findByHealthcareProfessionalIdOrPatientIdAndDate(Long healthcareProfessionalId, Long patientId,
-                                                                              LocalDateTime startDate, LocalDateTime endDate) {
+                                                                              LocalTime startTime, LocalTime endTime,
+                                                                              LocalDate appointmentDay) {
         try {
             return appointmentRepository
-                    .findByHealthcareProfessionalIdOrPatientIdAndDate(startDate, endDate, healthcareProfessionalId, patientId)
+                    .findByHealthcareProfessionalIdOrPatientIdAndDate(startTime, endTime, appointmentDay, healthcareProfessionalId, patientId)
                     .stream().map(entity -> new Appointment(
                             entity.getId(),
-                            entity.getDate(),
+                            entity.getAppointmentDay(),
                             entity.getDateCreated(),
-                            new HealthcareProfessional(entity.getHealthcareProfessionalId()),
                             new Patient(entity.getPatientId()),
-                            new HealthcareFacility(entity.getHealthcareFacilityId()),
                             entity.getStatus(),
-                            entity.getType()
+                            entity.getType(),
+                            new HealthcareProfessionalSchedule(
+                                    new HealthcareProfessional(entity.getHealthcareProfessionalId()),
+                                    new HealthcareFacility(entity.getHealthcareFacilityId()))
 
                     )).toList();
         } catch (Exception e) {
-            log.error("Erro ao buscar consulta healthcareProfessionalId={}, startDate={}, endDate={}", healthcareProfessionalId, startDate, endDate, e);
+            log.error("Erro ao buscar consulta healthcareProfessionalId={}, startDate={}, endDate={}", healthcareProfessionalId, startTime, endTime, e);
             throw new ErrorAccessDatabaseException();
         }
     }
@@ -117,16 +130,17 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
             return appointmentRepository.findByPatient_User_Id(userId, pageable)
                     .map(entity -> new Appointment(
                     entity.getId(),
-                    entity.getDate(),
+                    entity.getAppointmentDay(),
                     entity.getDateCreated(),
-                    new HealthcareProfessional(
-                            entity.getHealthcareProfessionalId(),
-                            entity.getHealthcareProfessionalUserId(),
-                            entity.getHealthcareProfessionalName()),
                     new Patient(entity.getPatientId(), entity.getPatientUserId(), entity.getPatientName()),
-                    new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()),
                     entity.getStatus(),
-                    entity.getType()
+                    entity.getType(),
+                            new HealthcareProfessionalSchedule(
+                                    new HealthcareProfessional(
+                                            entity.getHealthcareProfessionalId(),
+                                            entity.getHealthcareProfessionalUserId(),
+                                            entity.getHealthcareProfessionalName()),
+                                    new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()))
 
             ));
         } catch (Exception e) {

@@ -37,6 +37,7 @@ public class AppointmentController {
 
     }
 
+    //TODO rever o cancelamento
     @PostMapping("/cancel")
     public ResponseEntity<HttpStatus> cancel(@RequestBody @Valid CancelAppointmentRequestJson requestJson) {
         CancelAppointmentDTO cancelAppointmentDTO = new CancelAppointmentDTO(requestJson.appointmentId());
@@ -46,6 +47,7 @@ public class AppointmentController {
 
     }
 
+    //TODO rever pesquisa de busca. Parte de datas e a nova relacao com Appointment HealthcareProfessionalSchedule
     @GetMapping
     public ResponseEntity<PageResponse<AppointmentResponseJson>> getAppointmentsByToken(@RequestParam(defaultValue = "0") int page,
                                                                                         @RequestParam(defaultValue = "10") int pageSize) {
@@ -53,7 +55,7 @@ public class AppointmentController {
         Page<AppointmentResponseJson> response = getAppointmentsByTokenUseCase.get(params)
                 .map(appointment -> new AppointmentResponseJson(
                         appointment.getId(),
-                        appointment.getDate(),
+                        appointment.getAppointmentDay().atStartOfDay(), //TODO validar
                         appointment.getDateCreated(),
                         new AppointmentPersonaResponseJson(appointment.getHealthcareProfessionalId(), appointment.getHealthcareProfessionalName()),
                         new AppointmentPersonaResponseJson(appointment.getPatientId(), appointment.getPatientName()),

@@ -5,9 +5,11 @@ import com.uninter.vidaplus.appointment.core.domain.AppointmentType;
 import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
+import com.uninter.vidaplus.schedule.infra.gateway.entity.HealthcareProfessionalScheduleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -32,42 +34,53 @@ public class AppointmentEntity {
     @Enumerated(EnumType.STRING)
     private AppointmentType type;
 
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "appointment_day", nullable = false)
+    private LocalDate appointmentDay;
 
     @Column(name = "date_created", nullable = false)
     private LocalDateTime dateCreated;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healthcare_facility_id", referencedColumnName = "id")
-    private HealthcareFacilityEntity healthcareFacility;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "healthcare_professional_id", referencedColumnName = "id")
-    private HealthcareProfessionalEntity healthcareProfessional;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
     private PatientEntity patient;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "healthcare_professional_schedule_id", referencedColumnName = "id")
+    private HealthcareProfessionalScheduleEntity healthcareProfessionalSchedule;
+
     public Long getHealthcareFacilityId() {
-        return Optional.ofNullable(healthcareFacility).map(HealthcareFacilityEntity::getId).orElse(null);
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getHealthcareFacility)
+                .map(HealthcareFacilityEntity::getId)
+                .orElse(null);
     }
 
     public String getHealthcareFacilityName() {
-        return Optional.ofNullable(healthcareFacility).map(HealthcareFacilityEntity::getName).orElse(null);
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getHealthcareFacility)
+                .map(HealthcareFacilityEntity::getName)
+                .orElse(null);
     }
 
     public Long getHealthcareProfessionalId() {
-        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getId).orElse(null);
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getHealthcareProfessional)
+                .map(HealthcareProfessionalEntity::getId)
+                .orElse(null);
     }
 
     public Long getHealthcareProfessionalUserId() {
-        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getUserId).orElse(null);
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getHealthcareProfessional)
+                .map(HealthcareProfessionalEntity::getUserId)
+                .orElse(null);
     }
 
     public String getHealthcareProfessionalName() {
-        return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessionalEntity::getName).orElse(null);
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getHealthcareProfessional)
+                .map(HealthcareProfessionalEntity::getName)
+                .orElse(null);
     }
 
     public Long getPatientId() {

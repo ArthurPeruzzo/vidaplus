@@ -1,6 +1,8 @@
 package com.uninter.vidaplus.schedule.infra.gateway.database;
 
+import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
+import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.schedule.core.domain.TimeSlot;
 import com.uninter.vidaplus.schedule.core.domain.healthcareprofessional.HealthcareProfessionalSchedule;
@@ -16,7 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -59,6 +63,26 @@ public class TimeSlotDatabaseGateway implements TimeSlotGateway {
                     .toList();
         } catch (Exception e) {
             log.error("Erro ao buscar todos os horarios", e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    @Override
+    public Optional<HealthcareProfessionalSchedule> findScheduleBy(Long healthcareProfessionalId, Long healthcareFacilityId, LocalDateTime time) {
+        try {
+            return repository.findByProfessionalAndFacilityAndDateTime(healthcareProfessionalId, healthcareFacilityId, time)
+                    .map(entity -> new HealthcareProfessionalSchedule(
+                            entity.getId(),
+                            new HealthcareProfessional(entity.getHealthcareProfessionalId()),
+                            new HealthcareFacility(entity.getHealthcareFacilityId()),
+                            new TimeSlot(
+                                    entity.getTimeSlotId(),
+                                    entity.getTimeSlotDayOfWeek(),
+                                    entity.getTimeSlotStartTime(),
+                                    entity.getTimeSlotEndTime())
+                    ));
+        } catch (Exception e) {
+            log.error("Erro ao buscar horario por healthcareProfessionalId={}, healthcareFacilityId={}, time={}",healthcareProfessionalId, healthcareFacilityId, time, e);
             throw new ErrorAccessDatabaseException();
         }
     }
