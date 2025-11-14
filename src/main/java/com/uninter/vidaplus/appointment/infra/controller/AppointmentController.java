@@ -47,7 +47,6 @@ public class AppointmentController {
 
     }
 
-    //TODO rever pesquisa de busca. Parte de datas e a nova relacao com Appointment HealthcareProfessionalSchedule
     @GetMapping
     public ResponseEntity<PageResponse<AppointmentResponseJson>> getAppointmentsByToken(@RequestParam(defaultValue = "0") int page,
                                                                                         @RequestParam(defaultValue = "10") int pageSize) {
@@ -55,7 +54,10 @@ public class AppointmentController {
         Page<AppointmentResponseJson> response = getAppointmentsByTokenUseCase.get(params)
                 .map(appointment -> new AppointmentResponseJson(
                         appointment.getId(),
-                        appointment.getAppointmentDay().atStartOfDay(), //TODO validar
+                        appointment.getAppointmentDay(),
+                        appointment.getDayOfWeekTimeSlot(),
+                        appointment.getStartTimeTimeSlot(),
+                        appointment.getEndTimeTimeSlot(),
                         appointment.getDateCreated(),
                         new AppointmentPersonaResponseJson(appointment.getHealthcareProfessionalId(), appointment.getHealthcareProfessionalName()),
                         new AppointmentPersonaResponseJson(appointment.getPatientId(), appointment.getPatientName()),

@@ -12,6 +12,7 @@ import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.Healthcar
 import com.uninter.vidaplus.persona.core.domain.patient.Patient;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
+import com.uninter.vidaplus.schedule.core.domain.TimeSlot;
 import com.uninter.vidaplus.schedule.core.domain.healthcareprofessional.HealthcareProfessionalSchedule;
 import com.uninter.vidaplus.schedule.infra.gateway.entity.HealthcareProfessionalScheduleEntity;
 import com.uninter.vidaplus.schedule.infra.gateway.entity.TimeSlotEntity;
@@ -140,7 +141,8 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
                                             entity.getHealthcareProfessionalId(),
                                             entity.getHealthcareProfessionalUserId(),
                                             entity.getHealthcareProfessionalName()),
-                                    new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()))
+                                    new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()),
+                                    new TimeSlot(entity.getDayOfWeekTimeSlot(), entity.getStartTimeTimeSlot(), entity.getEndTimeTimeSlot()))
 
             ));
         } catch (Exception e) {

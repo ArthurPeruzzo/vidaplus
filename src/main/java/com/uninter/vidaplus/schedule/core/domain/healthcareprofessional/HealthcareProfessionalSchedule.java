@@ -24,6 +24,12 @@ public class HealthcareProfessionalSchedule {
 
     }
 
+    public HealthcareProfessionalSchedule(HealthcareProfessional healthcareProfessional, HealthcareFacility healthcareFacility, TimeSlot timeSlot) {
+        this.healthcareProfessional = healthcareProfessional;
+        this.healthcareFacility = healthcareFacility;
+        this.timeSlot = timeSlot;
+    }
+
     public Long getHealthcareProfessionalId() {
         return Optional.ofNullable(healthcareProfessional).map(HealthcareProfessional::getId).orElse(null);
     }

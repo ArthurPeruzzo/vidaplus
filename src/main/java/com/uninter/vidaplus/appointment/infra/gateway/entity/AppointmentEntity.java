@@ -6,11 +6,14 @@ import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFa
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.patient.entity.PatientEntity;
 import com.uninter.vidaplus.schedule.infra.gateway.entity.HealthcareProfessionalScheduleEntity;
+import com.uninter.vidaplus.schedule.infra.gateway.entity.TimeSlotEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @Entity
@@ -93,5 +96,26 @@ public class AppointmentEntity {
 
     public String getPatientName() {
         return Optional.ofNullable(patient).map(PatientEntity::getName).orElse(null);
+    }
+
+    public DayOfWeek getDayOfWeekTimeSlot() {
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getTimeSlot)
+                .map(TimeSlotEntity::getDayOfWeek)
+                .orElse(null);
+    }
+
+    public LocalTime getStartTimeTimeSlot() {
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getTimeSlot)
+                .map(TimeSlotEntity::getStartTime)
+                .orElse(null);
+    }
+
+    public LocalTime getEndTimeTimeSlot() {
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalScheduleEntity::getTimeSlot)
+                .map(TimeSlotEntity::getEndTime)
+                .orElse(null);
     }
 }

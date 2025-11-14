@@ -5,6 +5,7 @@ import com.uninter.vidaplus.appointment.core.exception.AppointmentHealthcareProf
 import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.core.domain.patient.Patient;
+import com.uninter.vidaplus.schedule.core.domain.TimeSlot;
 import com.uninter.vidaplus.schedule.core.domain.healthcareprofessional.HealthcareProfessionalSchedule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import lombok.ToString;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -121,5 +123,26 @@ public class Appointment {
             throw new AppointmentHealthcareProfessionalScheduleViolationException("As unidades hospitalares do paciente e da agenda do profissional nao sao compativeis");
         }
         this.healthcareProfessionalSchedule = healthcareProfessionalSchedule;
+    }
+
+    public DayOfWeek getDayOfWeekTimeSlot() {
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalSchedule::getTimeSlot)
+                .map(TimeSlot::getDayOfWeek)
+                .orElse(null);
+    }
+
+    public LocalTime getStartTimeTimeSlot() {
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalSchedule::getTimeSlot)
+                .map(TimeSlot::getStartTime)
+                .orElse(null);
+    }
+
+    public LocalTime getEndTimeTimeSlot() {
+        return Optional.ofNullable(healthcareProfessionalSchedule)
+                .map(HealthcareProfessionalSchedule::getTimeSlot)
+                .map(TimeSlot::getEndTime)
+                .orElse(null);
     }
 }

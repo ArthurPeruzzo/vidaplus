@@ -13,4 +13,10 @@ public class TimeSlot {
     private DayOfWeek dayOfWeek;
     private LocalTime startTime;
     private LocalTime endTime;
+
+    public TimeSlot(DayOfWeek dayOfWeekTimeSlot, LocalTime startTimeTimeSlot, LocalTime endTimeTimeSlot) {
+        this.dayOfWeek = dayOfWeekTimeSlot;
+        this.startTime = startTimeTimeSlot;
+        this.endTime = endTimeTimeSlot;
+    }
 }
