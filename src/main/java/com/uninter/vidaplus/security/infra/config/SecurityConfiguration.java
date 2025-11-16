@@ -40,7 +40,6 @@ public class SecurityConfiguration {
     };
 
     protected static final String[] ENDPOINTS_PATIENT = {
-            "/appointments"
     };
 
     protected static final String[] ENDPOINTS_HEALTHCARE_PROFESSIONAL = {
@@ -48,7 +47,8 @@ public class SecurityConfiguration {
     };
 
     protected static final String[] ENDPOINTS_APPOINTMENTS = {
-            "/appointments/cancel"
+            "/appointments/cancel",
+            "/appointments"
     };
 
 

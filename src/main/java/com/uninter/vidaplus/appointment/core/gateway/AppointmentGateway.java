@@ -15,4 +15,5 @@ public interface AppointmentGateway {
     void update(Appointment appointment);
     List<Appointment> findByHealthcareProfessionalIdOrPatientIdAndDate(Long healthcareProfessionalId, Long patientId, LocalTime startDate, LocalTime endDate, LocalDate appointmentDay);
     Page<Appointment> findAllPatientAppointmentByUserId(Long userId, FilterParamsDTO paramsDTO);
+    Page<Appointment> findAllHealthcareProfessionalAppointmentByUserId(Long userId, FilterParamsDTO params);
 }

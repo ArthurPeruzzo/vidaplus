@@ -1,7 +1,6 @@
 package com.uninter.vidaplus.appointment.core.usecase;
 
 import com.uninter.vidaplus.appointment.core.domain.Appointment;
-import com.uninter.vidaplus.appointment.core.exception.AppointmentPersonaEligibleException;
 import com.uninter.vidaplus.appointment.core.gateway.AppointmentGateway;
 import com.uninter.vidaplus.appointment.infra.controller.dto.FilterParamsDTO;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
@@ -22,19 +21,13 @@ public class GetAppointmentsByTokenUseCase {
     private final AppointmentGateway appointmentGateway;
 
     public Page<Appointment> get(FilterParamsDTO params) {
-        checkPersonaIsEligible();
+        List<RoleEnum> roles = tokenGateway.getRoles();
         Long userId = tokenGateway.getUserId();
 
-        return appointmentGateway.findAllPatientAppointmentByUserId(userId, params);
-
-    }
-
-    private void checkPersonaIsEligible() {
-        List<RoleEnum> roles = tokenGateway.getRoles();
-
-        if (!roles.contains(RoleEnum.ROLE_PATIENT)) {
-            log.warn("Somente paciente pode acessar a lista de consultas, roles={}", roles);
-            throw new AppointmentPersonaEligibleException("Somente paciente pode acessar a lista de consultas");
+        if (roles.contains(RoleEnum.ROLE_PATIENT)) {
+            return appointmentGateway.findAllPatientAppointmentByUserId(userId, params);
         }
+
+        return appointmentGateway.findAllHealthcareProfessionalAppointmentByUserId(userId, params);
     }
 }

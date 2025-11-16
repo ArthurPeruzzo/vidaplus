@@ -130,25 +130,41 @@ public class AppointmentDatabaseGateway implements AppointmentGateway {
         try {
             Pageable pageable = PageRequest.of(params.page(), params.pageSize());
             return appointmentRepository.findByPatient_User_Id(userId, pageable)
-                    .map(entity -> new Appointment(
-                    entity.getId(),
-                    entity.getAppointmentDay(),
-                    entity.getDateCreated(),
-                    new Patient(entity.getPatientId(), entity.getPatientUserId(), entity.getPatientName()),
-                    entity.getStatus(),
-                    entity.getType(),
-                            new HealthcareProfessionalSchedule(
-                                    new HealthcareProfessional(
-                                            entity.getHealthcareProfessionalId(),
-                                            entity.getHealthcareProfessionalUserId(),
-                                            entity.getHealthcareProfessionalName()),
-                                    new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()),
-                                    new TimeSlot(entity.getDayOfWeekTimeSlot(), entity.getStartTimeTimeSlot(), entity.getEndTimeTimeSlot()))
-
-            ));
+                    .map(AppointmentDatabaseGateway::mapAppointment);
         } catch (Exception e) {
             log.error("Erro ao buscar consultas paginadas", e);
             throw new ErrorAccessDatabaseException();
         }
+    }
+
+    @Override
+    public Page<Appointment> findAllHealthcareProfessionalAppointmentByUserId(Long userId, FilterParamsDTO params) {
+        try {
+            Pageable pageable = PageRequest.of(params.page(), params.pageSize());
+            return appointmentRepository.findByHealthcareProfessionalId_UserId(userId, pageable)
+                    .map(AppointmentDatabaseGateway::mapAppointment);
+        } catch (Exception e) {
+            log.error("Erro ao buscar consultas paginadas", e);
+            throw new ErrorAccessDatabaseException();
+        }
+    }
+
+    private static Appointment mapAppointment(AppointmentEntity entity) {
+        return new Appointment(
+                entity.getId(),
+                entity.getAppointmentDay(),
+                entity.getDateCreated(),
+                new Patient(entity.getPatientId(), entity.getPatientUserId(), entity.getPatientName()),
+                entity.getStatus(),
+                entity.getType(),
+                new HealthcareProfessionalSchedule(
+                        new HealthcareProfessional(
+                                entity.getHealthcareProfessionalId(),
+                                entity.getHealthcareProfessionalUserId(),
+                                entity.getHealthcareProfessionalName()),
+                        new HealthcareFacility(entity.getHealthcareFacilityId(), entity.getHealthcareFacilityName()),
+                        new TimeSlot(entity.getDayOfWeekTimeSlot(), entity.getStartTimeTimeSlot(), entity.getEndTimeTimeSlot()))
+
+        );
     }
 }

@@ -38,6 +38,22 @@ public interface AppointmentRepository extends JpaRepository<AppointmentEntity, 
                                                                              @Param("healthcareProfessionalId") Long healthcareProfessionalId,
                                                                              @Param("patientId") Long patientId);
 
-    Page<AppointmentEntity> findByPatient_User_Id(Long id, Pageable pageable);
+    @Query(value = """
+            SELECT a FROM AppointmentEntity a
+            JOIN a.patient p
+            JOIN p.user u
+            WHERE u.id = :userId
+            """)
+    Page<AppointmentEntity> findByPatient_User_Id(@Param("userId") Long userId, Pageable pageable);
+
+    @Query(value = """
+            SELECT a FROM AppointmentEntity a
+            JOIN a.healthcareProfessionalSchedule h
+            JOIN h.healthcareProfessional hp
+            JOIN hp.user u
+            WHERE u.id = :userId
+            """)
+    Page<AppointmentEntity> findByHealthcareProfessionalId_UserId(@Param("userId") Long userId,
+                                                           Pageable pageable);
 
 }
