@@ -44,7 +44,9 @@ public class Appointment {
     }
 
     private static void validateDate(LocalDateTime date, LocalDateTime now) {
-        if (date.isBefore(now.plusDays(1))) {
+        LocalDate dateToLocalDateValidate = date.toLocalDate();
+        LocalDate nowToLocalDate = now.toLocalDate();
+        if (dateToLocalDateValidate.isBefore(nowToLocalDate.plusDays(1))) {
             throw new AppointmentDateViolationException("A data do agendamento deve ter pelo menos 1 dia de antecedência");
         }
 
