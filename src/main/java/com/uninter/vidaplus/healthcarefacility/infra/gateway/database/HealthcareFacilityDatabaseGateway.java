@@ -1,5 +1,6 @@
 package com.uninter.vidaplus.healthcarefacility.infra.gateway.database;
 
+import com.uninter.vidaplus.healthcarefacility.core.domain.Cnpj;
 import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.healthcarefacility.core.exception.HealthcareFacilityAlreadyCreatedException;
 import com.uninter.vidaplus.healthcarefacility.core.gateway.HealthcareFacilityGateway;
@@ -9,6 +10,9 @@ import com.uninter.vidaplus.infra.exception.ErrorAccessDatabaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -35,5 +39,18 @@ public class HealthcareFacilityDatabaseGateway implements HealthcareFacilityGate
             throw new ErrorAccessDatabaseException();
         }
 
+    }
+
+    @Override
+    public Page<HealthcareFacility> findByParams(int page, int pageSize) {
+        try {
+            Pageable pageRequest = PageRequest.of(page, pageSize);
+            return healthcareFacilityRepository.findAll(pageRequest)
+                    .map(entity ->
+                            new HealthcareFacility(entity.getId(), entity.getName(), new Cnpj(entity.getCnpj())));
+        } catch (Exception e) {
+            log.error("Erro ao buscar unidades hospitalares", e);
+            throw new ErrorAccessDatabaseException();
+        }
     }
 }
