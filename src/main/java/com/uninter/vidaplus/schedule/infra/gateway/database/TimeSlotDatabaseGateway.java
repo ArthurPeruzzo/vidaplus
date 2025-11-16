@@ -2,6 +2,7 @@ package com.uninter.vidaplus.schedule.infra.gateway.database;
 
 import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
+import com.uninter.vidaplus.infra.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.schedule.core.domain.TimeSlot;
@@ -12,7 +13,6 @@ import com.uninter.vidaplus.schedule.infra.gateway.entity.HealthcareProfessional
 import com.uninter.vidaplus.schedule.infra.gateway.entity.TimeSlotEntity;
 import com.uninter.vidaplus.schedule.infra.gateway.repository.HealthcareProfessionalScheduleRepository;
 import com.uninter.vidaplus.schedule.infra.gateway.repository.TimeSlotRepository;
-import com.uninter.vidaplus.security.user.core.exception.ErrorAccessDatabaseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

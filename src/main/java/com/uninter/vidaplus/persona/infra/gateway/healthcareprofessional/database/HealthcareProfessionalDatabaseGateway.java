@@ -1,11 +1,11 @@
 package com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.database;
 
 import com.uninter.vidaplus.healthcarefacility.infra.gateway.entity.HealthcareFacilityEntity;
+import com.uninter.vidaplus.infra.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.persona.core.domain.healthcareprofessional.HealthcareProfessional;
 import com.uninter.vidaplus.persona.core.gateway.healthcareprofessional.HealthcareProfessionalGateway;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.entity.HealthcareProfessionalEntity;
 import com.uninter.vidaplus.persona.infra.gateway.healthcareprofessional.repository.HealthcareProfessionalRepository;
-import com.uninter.vidaplus.security.user.core.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

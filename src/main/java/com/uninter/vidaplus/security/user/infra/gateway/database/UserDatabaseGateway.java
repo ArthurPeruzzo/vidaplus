@@ -1,11 +1,12 @@
 package com.uninter.vidaplus.security.user.infra.gateway.database;
 
+import com.uninter.vidaplus.infra.exception.ErrorAccessDatabaseException;
+import com.uninter.vidaplus.persona.core.domain.exception.PersonaAlreadyCreatedException;
 import com.uninter.vidaplus.security.user.core.domain.Email;
 import com.uninter.vidaplus.security.user.core.domain.Role;
 import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
 import com.uninter.vidaplus.security.user.core.domain.User;
 import com.uninter.vidaplus.security.user.core.domain.password.PasswordHash;
-import com.uninter.vidaplus.security.user.core.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.security.user.core.gateway.UserGateway;
 import com.uninter.vidaplus.security.user.infra.entity.RoleEntity;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
@@ -13,6 +14,7 @@ import com.uninter.vidaplus.security.user.infra.repository.RoleRepository;
 import com.uninter.vidaplus.security.user.infra.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -58,6 +60,9 @@ public class UserDatabaseGateway implements UserGateway {
                     new Email(entity.getEmail()),
                     new PasswordHash(entity.getPassword()),
                     entity.getRoles().stream().map(roleEntity -> new Role(roleEntity.getId(), roleEntity.getName())).toList());
+        } catch (DataIntegrityViolationException e) {
+            log.error("Já existe um usuario com o mesmo email", e);
+            throw new PersonaAlreadyCreatedException("Email já utilizado. Informe um novo email");
         } catch (Exception e) {
             log.error("Erro ao salvar usuario", e);
             throw new ErrorAccessDatabaseException();
