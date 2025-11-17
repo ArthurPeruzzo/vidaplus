@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/administrator")
+@RequestMapping(value = "/administrators")
 public class AdministratorController {
 
     private final CreateAdministratorUseCase createAdministratorUseCase;
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid AdministratorCreateRequestJson requestJson) {
         AdministratorCreateDto dto = new AdministratorCreateDto(
                 requestJson.name(), requestJson.lastName(),

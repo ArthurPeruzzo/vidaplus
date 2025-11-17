@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,17 +24,33 @@ public class SecurityConfiguration {
 
     private final UserAuthenticationFilter userAuthenticationFilter;
 
+    protected static final String ADMINISTRATOR = "ADMINISTRATOR";
+    protected static final String HEALTHCARE_PROFESSIONAL = "HEALTHCARE_PROFESSIONAL";
+    protected static final String PATIENT = "PATIENT";
+
+
     protected static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/authenticate/login",
     };
 
     protected static final String [] ENDPOINTS_ADMIN = {
-            "/administrator/create"
+            "/administrators",
+            "/patients",
+            "/healthcare-professionals",
     };
 
-    protected static final String [] ENDPOINTS_PATIENT = {
-            "/authenticate/test1"
+    protected static final String[] ENDPOINTS_PATIENT = {
     };
+
+    protected static final String[] ENDPOINTS_HEALTHCARE_PROFESSIONAL = {
+            "/time-slots"
+    };
+
+    protected static final String[] ENDPOINTS_APPOINTMENTS = {
+            "/appointments/cancel",
+            "/appointments"
+    };
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -41,8 +58,16 @@ public class SecurityConfiguration {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).permitAll()
-                                .requestMatchers(ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
-                                .requestMatchers(ENDPOINTS_PATIENT).hasRole("PATIENT")
+                                .requestMatchers(HttpMethod.GET, "/healthcare-facilities").hasAnyRole(
+                                        ADMINISTRATOR,
+                                        HEALTHCARE_PROFESSIONAL,
+                                        PATIENT
+                                )
+                                .requestMatchers(HttpMethod.POST, "/healthcare-facilities").hasRole(ADMINISTRATOR)
+                                .requestMatchers(ENDPOINTS_ADMIN).hasRole(ADMINISTRATOR)
+                                .requestMatchers(ENDPOINTS_HEALTHCARE_PROFESSIONAL).hasRole(HEALTHCARE_PROFESSIONAL)
+                                .requestMatchers(ENDPOINTS_PATIENT).hasRole(PATIENT)
+                                .requestMatchers(ENDPOINTS_APPOINTMENTS).hasAnyRole(HEALTHCARE_PROFESSIONAL, PATIENT)
                                 .anyRequest().denyAll()
                 ).exceptionHandling(exception ->
                         exception.authenticationEntryPoint((request, response, authException) -> {

@@ -1,10 +1,10 @@
 package com.uninter.vidaplus.persona.infra.gateway.administrator.database;
 
+import com.uninter.vidaplus.infra.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.persona.core.domain.administrator.Administrator;
 import com.uninter.vidaplus.persona.core.gateway.administrator.AdministratorGateway;
 import com.uninter.vidaplus.persona.infra.gateway.administrator.entity.AdministratorEntity;
 import com.uninter.vidaplus.persona.infra.gateway.administrator.repository.AdministratorRepository;
-import com.uninter.vidaplus.security.user.core.exception.ErrorAccessDatabaseException;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;

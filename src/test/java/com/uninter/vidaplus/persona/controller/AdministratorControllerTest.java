@@ -40,7 +40,7 @@ class AdministratorControllerTest {
             "'{\"name\":\"Name\",\"lastName\":\"Last\",\"email\":\"email@email.com\",\"password\":\"\"}', password, 'A senha deve ser preenchida'"
     })
     void shouldReturn400WithValidationMessage(String requestJson, String field, String expectedMessage) throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/administrator/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/administrators")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(requestJson))
                 .andExpect(status().isBadRequest())
@@ -60,7 +60,7 @@ class AdministratorControllerTest {
                 }
                 """;
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/administrator/create")
+        mockMvc.perform(MockMvcRequestBuilders.post("/administrators")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().is2xxSuccessful());

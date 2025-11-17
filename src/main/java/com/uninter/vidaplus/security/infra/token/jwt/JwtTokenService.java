@@ -7,6 +7,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;
+import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -55,6 +57,26 @@ public class JwtTokenService implements TokenGateway {
     public String getEmail() {
         try {
             return decodeToken(getAuthorization()).getClaim(EMAIL).asString();
+        } catch (JWTVerificationException ex) {
+            log.warn("Falha ao verificar JWT: {}", ex.getMessage());
+            throw new JWTVerificationException("Token inválido ou expirado.", ex);
+        }
+    }
+
+    @Override
+    public Long getUserId() {
+        try {
+            return Long.parseLong(decodeToken(getAuthorization()).getSubject());
+        } catch (JWTVerificationException ex) {
+            log.warn("Falha ao verificar JWT: {}", ex.getMessage());
+            throw new JWTVerificationException("Token inválido ou expirado.", ex);
+        }
+    }
+
+    @Override
+    public List<RoleEnum> getRoles() {
+        try {
+            return decodeToken(getAuthorization()).getClaim(ROLES).asList(RoleEnum.class);
         } catch (JWTVerificationException ex) {
             log.warn("Falha ao verificar JWT: {}", ex.getMessage());
             throw new JWTVerificationException("Token inválido ou expirado.", ex);
