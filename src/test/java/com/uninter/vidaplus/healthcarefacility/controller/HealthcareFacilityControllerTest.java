@@ -1,6 +1,7 @@
 package com.uninter.vidaplus.healthcarefacility.controller;
 
 import com.uninter.vidaplus.healthcarefacility.core.usecase.CreateHealthcareFacilityUseCase;
+import com.uninter.vidaplus.healthcarefacility.core.usecase.FindHealthcareFacilityUseCase;
 import com.uninter.vidaplus.healthcarefacility.infra.controller.HealthcareFacilityController;
 import com.uninter.vidaplus.healthcarefacility.infra.controller.dto.HealthcareFacilityCreateDto;
 import com.uninter.vidaplus.resources.NoSecurityConfiguration;
@@ -32,10 +33,13 @@ class HealthcareFacilityControllerTest {
     @MockitoBean
     private CreateHealthcareFacilityUseCase createHealthcareFacilityUseCase;
 
+    @MockitoBean
+    private FindHealthcareFacilityUseCase findHealthcareFacilityUseCase;
+
     @ParameterizedTest
     @CsvSource({
             "'{\"name\":\"\",\"cnpj\":\"99.607.784/0001-88\"}', name, 'O nome deve ser preenchido'",
-            "'{\"name\":\"Teste\",\"cnpj\":\"996077840001\"}', cnpj, 'O formato do cnpj não é válido. Deve ser seguido o seguinte formato de exemplo: 00.000.000/0000-00 ou sem formatação'"
+            "'{\"name\":\"Teste\",\"cnpj\":\"996077840001\"}', cnpj, 'O conteúdo ou a formatação do cnpj não é válida. Deve ser seguido o seguinte formato de exemplo: 00.000.000/0000-00 ou sem formatação'"
     })
     void shouldReturn400WithValidationMessage(String requestJson, String field, String expectedMessage) throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/healthcare-facilities")
