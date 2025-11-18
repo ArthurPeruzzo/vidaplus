@@ -30,7 +30,7 @@ public record AdministratorCreateRequestJson(
         String email,
 
         @Schema(
-                description = "Deve conter letras maiúsculas, minúsculas, números e caracteres especiais",
+                description = "A senha deve conter letras maiúsculas, minúsculas, números e caracteres especiais",
                 example = "VidaPlus2025!@#"
         )
         @NotBlank(message = "A senha deve ser preenchida")
