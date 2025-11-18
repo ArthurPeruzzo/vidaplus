@@ -27,14 +27,14 @@ public class CreateAppointmentRequestJson {
     private LocalDateTime date;
 
     @Schema(
-            description = "Id do profissional de saúde",
+            description = "Id do profissional de saúde. O profissional precisa ser da mesma unidade hospitalar que o paciente",
             example = "2"
     )
     @NotNull(message = "Informe o profissional de saúde")
     private Long healthcareProfessionalId;
 
     @Schema(
-            description = "O tipo do atendimento IN_PERSON = Pessoalmente, TELECONSULTATION = Teleconsulta, HOME_VISIT = Visita domiciliar",
+            description = "O tipo do atendimento",
             example = "IN_PERSON"
     )
     @NotNull(message = "Informe o tipo do atendimento (IN_PERSON, TELECONSULTATION, HOME_VISIT)")
