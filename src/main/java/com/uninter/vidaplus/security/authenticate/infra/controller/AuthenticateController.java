@@ -4,6 +4,7 @@ import com.uninter.vidaplus.security.authenticate.core.usecase.AuthenticateUserU
 import com.uninter.vidaplus.security.authenticate.infra.controller.dto.LoginInputDto;
 import com.uninter.vidaplus.security.authenticate.infra.controller.json.request.LoginRequestJson;
 import com.uninter.vidaplus.security.authenticate.infra.controller.json.response.LoginResponseJson;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class AuthenticateController {
 
     private final AuthenticateUserUseCase authenticateUserUseCase;
 
+    @Operation(
+            summary = "Endpoint de login"
+    )
     @PostMapping("/login")
     public ResponseEntity<LoginResponseJson> login(@RequestBody @Valid LoginRequestJson loginRequestJson) {
         LoginInputDto loginInputDto = new LoginInputDto(loginRequestJson.email(), loginRequestJson.password());

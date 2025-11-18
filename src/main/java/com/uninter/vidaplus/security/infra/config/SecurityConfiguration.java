@@ -31,6 +31,10 @@ public class SecurityConfiguration {
 
     protected static final String [] ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED = {
             "/authenticate/login",
+            "/v3/api-docs/**",
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/favicon.ico"
     };
 
     protected static final String [] ENDPOINTS_ADMIN = {

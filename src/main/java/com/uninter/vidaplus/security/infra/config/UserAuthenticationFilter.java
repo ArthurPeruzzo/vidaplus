@@ -15,6 +15,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.security.sasl.AuthenticationException;
@@ -29,6 +30,7 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     private final TokenGateway tokenGateway;
     private final UserGateway userGateway;
+    private static final AntPathMatcher matcher = new AntPathMatcher();
 
     @Override
     protected void doFilterInternal(
@@ -47,7 +49,8 @@ public class UserAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean checkIfEndpointIsNotPublic(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        return !Arrays.asList(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED).contains(requestURI);
+        return Arrays.stream(SecurityConfiguration.ENDPOINTS_WITH_AUTHENTICATION_NOT_REQUIRED)
+                .noneMatch(pattern -> matcher.match(pattern, requestURI));
     }
 
     private void verifyHasTokenInRequest(HttpServletRequest request) throws AuthenticationException {
