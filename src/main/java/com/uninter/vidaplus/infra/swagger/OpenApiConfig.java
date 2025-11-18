@@ -10,7 +10,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         tags = {
+                @Tag(name = "Autenticação", description = "Autenticação"),
                 @Tag(name = "Administradores", description = "Operações relacionadas aos administradores"),
+                @Tag(name = "Unidades Hospilares", description = "Operações relacionadas as unidades hospitalares"),
+                @Tag(name = "Profissionais da Saúde", description = "Operações relacionadas aos profissionais da saúde"),
+                @Tag(name = "Pacientes", description = "Operações relacionadas aos pacientes"),
+                @Tag(name = "Agendas", description = "Operações relacionadas a agenda do profissional da saúde"),
                 @Tag(name = "Consultas", description = "Gerenciamento de consultas"),
         },
         security = {
