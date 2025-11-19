@@ -85,7 +85,7 @@ public class AppointmentController {
             @ApiResponse(responseCode = "401", description = "Não autenticado", content = { @Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "403", description = "Acesso negado", content = { @Content(mediaType = "application/json")})
     })
-    @GetMapping
+    @GetMapping("/by")
     public ResponseEntity<PageResponse<AppointmentResponseJson>> getAppointmentsByToken(
             @Parameter(description = "Número da página a ser buscada (inicia em 0)")
             @RequestParam(defaultValue = "0") int page,
