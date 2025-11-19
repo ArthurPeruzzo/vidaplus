@@ -8,6 +8,8 @@ import com.uninter.vidaplus.security.infra.token.TokenGateway;
 import com.uninter.vidaplus.security.infra.token.dto.TokenParams;
 import com.uninter.vidaplus.security.infra.userdetails.UserDetailsImpl;
 import com.uninter.vidaplus.security.user.core.domain.Email;
+import com.uninter.vidaplus.security.user.core.domain.Role;
+import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
 import com.uninter.vidaplus.security.user.core.domain.User;
 import com.uninter.vidaplus.security.user.core.domain.password.PasswordHash;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +26,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 class AuthenticateUserUseCaseUnitTest {
@@ -98,8 +100,9 @@ class AuthenticateUserUseCaseUnitTest {
         LoginInputDto loginInputDto = new LoginInputDto("any-email", "any-password");
         Authentication authenticationMock = Mockito.mock(Authentication.class);
         String token = "any-token";
+        List<Role> roles = List.of(new Role(1L, RoleEnum.ROLE_PATIENT));
 
-        User user = new User(1L, new Email("default@email.com"), new PasswordHash("any-hash"), new ArrayList<>());
+        User user = new User(1L, new Email("default@email.com"), new PasswordHash("any-hash"), roles);
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         Mockito.when(authenticationManager.authenticate(Mockito.any(UsernamePasswordAuthenticationToken.class)))
