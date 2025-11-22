@@ -97,4 +97,72 @@ class HealthcareFacilityIntegrationTest extends AbstractContainer {
                 .statusCode(201);
 
     }
+
+    @Test
+    void shouldFindHealthcareFacilitySuccessFully() {
+
+        RoleEntity roleEntity = new RoleEntity(null, RoleEnum.ROLE_ADMINISTRATOR);
+
+        roleRepository.saveAndFlush(roleEntity);
+
+        UserEntity user = UserEntity.builder()
+                .email("any@any.com")
+                .password(securityConfiguration.passwordEncoder().encode("any"))
+                .roles(List.of(roleEntity))
+                .build();
+
+        userRepository.saveAndFlush(user);
+
+        String token = RestAssured
+                .given()
+                .contentType("application/json")
+                .body("""
+                        {
+                            "email": "any@any.com",
+                            "password": "any"
+                        }
+                        """)
+                .when()
+                .post("/authenticate/login")
+                .then()
+                .statusCode(200)
+                .body("token", Matchers.notNullValue())
+                .body("token", Matchers.instanceOf(String.class))
+                .extract()
+                .path("token");
+
+        Assertions.assertNotNull(token);
+
+        Header header = new Header("Authorization", token);
+
+        RestAssured
+                .given()
+                .contentType("application/json")
+                .header(header)
+                .body("""
+                        {
+                            "name": "Teste",
+                            "cnpj": "99607784000188"
+                        }
+                        """)
+                .when()
+                .post("/healthcare-facilities")
+                .then()
+                .statusCode(201);
+
+        int size = RestAssured
+                .given()
+                .contentType("application/json")
+                .header(header)
+                .param("page", "0")
+                .param("pageSize", "10")
+                .when()
+                .get("/healthcare-facilities")
+                .then()
+                .statusCode(200).extract()
+                .path("content.size()");
+
+        Assertions.assertEquals(1, size);
+
+    }
 }
