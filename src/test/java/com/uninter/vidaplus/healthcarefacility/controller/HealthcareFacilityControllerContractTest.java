@@ -1,5 +1,7 @@
 package com.uninter.vidaplus.healthcarefacility.controller;
 
+import com.uninter.vidaplus.healthcarefacility.core.domain.Cnpj;
+import com.uninter.vidaplus.healthcarefacility.core.domain.HealthcareFacility;
 import com.uninter.vidaplus.healthcarefacility.core.usecase.CreateHealthcareFacilityUseCase;
 import com.uninter.vidaplus.healthcarefacility.core.usecase.FindHealthcareFacilityUseCase;
 import com.uninter.vidaplus.healthcarefacility.infra.controller.HealthcareFacilityController;
@@ -12,20 +14,24 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @ActiveProfiles("controller-test")
 @ImportAutoConfiguration(NoSecurityConfiguration.class)
 @WebMvcTest(controllers = HealthcareFacilityController.class)
-class HealthcareFacilityControllerTest {
+class HealthcareFacilityControllerContractTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -67,4 +73,39 @@ class HealthcareFacilityControllerTest {
 
         Mockito.verify(createHealthcareFacilityUseCase).create(Mockito.any(HealthcareFacilityCreateDto.class));
     }
+
+    @Test
+    void shouldReturn200WhenParamsValid_findAllHealthcareFacilities() throws Exception {
+        int page = 0;
+        int pageSize = 10;
+        String response = """
+                {
+                     "content": [
+                         {
+                             "id": 1,
+                             "name": "Santa Maria",
+                             "cnpj": "26793920000106"
+                         }
+                     ],
+                     "page": 0,
+                     "size": 10,
+                     "totalElements": 1,
+                     "totalPages": 1
+                 }
+                """;
+
+        List<HealthcareFacility> healthcareFacilities = List.of(new HealthcareFacility(1L, "Santa Maria", new Cnpj("26793920000106")));
+        Page<HealthcareFacility> result = new PageImpl<>(healthcareFacilities, PageRequest.of(page, pageSize), 1);
+        Mockito.when(findHealthcareFacilityUseCase.findByParams(page, pageSize)).thenReturn(result);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/healthcare-facilities")
+                        .param("page", "0")
+                        .param("pageSize", "10")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(content().json(response));
+
+        Mockito.verify(findHealthcareFacilityUseCase).findByParams(page, pageSize);
+    }
+
 }
