@@ -47,14 +47,12 @@ class AdministratorIntegrationTest extends AbstractContainer {
     @Test
     void shouldAuthenticateSuccessFully() {
 
-        RoleEntity roleEntity = new RoleEntity(null, RoleEnum.ROLE_ADMINISTRATOR);
-
-        roleRepository.saveAndFlush(roleEntity);
+        List<RoleEntity> roles = roleRepository.findByNameIn(List.of(RoleEnum.ROLE_ADMINISTRATOR));
 
         UserEntity user = UserEntity.builder()
                 .email("any@any.com")
                 .password(securityConfiguration.passwordEncoder().encode("any"))
-                .roles(List.of(roleEntity))
+                .roles(roles)
                 .build();
 
         userRepository.saveAndFlush(user);
