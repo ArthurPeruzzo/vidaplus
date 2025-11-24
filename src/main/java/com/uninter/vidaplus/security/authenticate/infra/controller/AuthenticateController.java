@@ -30,7 +30,7 @@ public class AuthenticateController {
             description = "Login do sistema"
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Login executado com sucesso", content = { @Content(mediaType = "application/json")}),
+            @ApiResponse(responseCode = "200", description = "Login executado com sucesso", content = { @Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "404", description = "Alguma informação que compõe o processo de login não foi encontrado", content = { @Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "400", description = "Dados inválidos" , content = { @Content(mediaType = "application/json")}),
             @ApiResponse(responseCode = "401", description = "Não autenticado", content = { @Content(mediaType = "application/json")}),
