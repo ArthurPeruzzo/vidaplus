@@ -32,7 +32,7 @@ public abstract class AbstractContainer {
         List<String> tables = jdbcTemplate.queryForList(
                 "SELECT table_name FROM information_schema.tables " +
                         "WHERE table_schema = DATABASE() " +
-                        "AND table_name != 'flyway_schema_history'",
+                        "AND table_name not in('flyway_schema_history', 'roles', 'time_slot')",
                 String.class
         );
 

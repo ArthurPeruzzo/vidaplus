@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Agendas")
 public class TimeSlotController {
 
-    private final CreateAllHealthcareProfessionalScheduleUseCase createAllHealthcareProfessionalScheduleUseCase;
+    private final CreateAllHealthcareProfessionalScheduleUseCase useCase;
 
     @Operation(
             summary = "Criar agenda do profissional da saúde",
@@ -35,7 +35,7 @@ public class TimeSlotController {
     })
     @PostMapping
     public ResponseEntity<HttpStatus> createAllHealthcareProfessionalSchedule() {
-        createAllHealthcareProfessionalScheduleUseCase.createAllSchedules();
+        useCase.createAllSchedules();
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

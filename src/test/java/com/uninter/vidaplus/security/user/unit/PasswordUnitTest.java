@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.security.user.domain;
+package com.uninter.vidaplus.security.user.unit;
 
 import com.uninter.vidaplus.security.user.core.domain.password.Password;
 import org.junit.jupiter.api.Assertions;

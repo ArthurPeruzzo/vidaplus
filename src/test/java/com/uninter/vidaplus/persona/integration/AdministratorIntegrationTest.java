@@ -1,7 +1,6 @@
 package com.uninter.vidaplus.persona.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
-import com.uninter.vidaplus.security.databuilder.entity.RoleEntityDataBuilder;
 import com.uninter.vidaplus.security.infra.config.SecurityConfiguration;
 import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
 import com.uninter.vidaplus.security.user.infra.entity.RoleEntity;
@@ -48,17 +47,12 @@ class AdministratorIntegrationTest extends AbstractContainer {
     @Test
     void shouldAuthenticateSuccessFully() {
 
-        RoleEntity roleEntity = new RoleEntityDataBuilder()
-                .withId(null)
-                .withRole(RoleEnum.ROLE_ADMINISTRATOR)
-                .build();
-
-        roleRepository.saveAndFlush(roleEntity);
+        List<RoleEntity> roles = roleRepository.findByNameIn(List.of(RoleEnum.ROLE_ADMINISTRATOR));
 
         UserEntity user = UserEntity.builder()
                 .email("any@any.com")
                 .password(securityConfiguration.passwordEncoder().encode("any"))
-                .roles(List.of(roleEntity))
+                .roles(roles)
                 .build();
 
         userRepository.saveAndFlush(user);

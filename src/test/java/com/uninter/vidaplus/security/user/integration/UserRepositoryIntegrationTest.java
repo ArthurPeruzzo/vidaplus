@@ -1,8 +1,6 @@
-package com.uninter.vidaplus.security.authenticate.repository;
+package com.uninter.vidaplus.security.user.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
-import com.uninter.vidaplus.security.databuilder.entity.RoleEntityDataBuilder;
-import com.uninter.vidaplus.security.databuilder.entity.UserEntityDataBuilder;
 import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
 import com.uninter.vidaplus.security.user.infra.entity.RoleEntity;
 import com.uninter.vidaplus.security.user.infra.entity.UserEntity;
@@ -19,7 +17,7 @@ import java.util.Optional;
 
 @ActiveProfiles("integration-test")
 @DataJpaTest
-class UserRepositoryTest extends AbstractContainer {
+class UserRepositoryIntegrationTest extends AbstractContainer {
 
     @Autowired
     private UserRepository userRepository;
@@ -30,17 +28,12 @@ class UserRepositoryTest extends AbstractContainer {
     @Test
     void shouldSuccessFindByEmail() {
         String email = "any@email.com";
-        RoleEntity roleEntity = new RoleEntityDataBuilder()
-                .withId(null)
-                .withRole(RoleEnum.ROLE_ADMINISTRATOR)
-                .build();
+
+        RoleEntity roleEntity = new RoleEntity(null, RoleEnum.ROLE_ADMINISTRATOR);
 
         roleRepository.saveAndFlush(roleEntity);
 
-        UserEntity userEntity = new UserEntityDataBuilder()
-                .withId(null)
-                .withEmail(email)
-                .withRoles(List.of(roleEntity)).build();
+        UserEntity userEntity = new UserEntity(null, email, "defaultPassword", List.of(roleEntity));
 
         userRepository.save(userEntity);
 

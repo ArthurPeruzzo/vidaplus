@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("controller-test")
 @ImportAutoConfiguration(NoSecurityConfiguration.class)
 @WebMvcTest(controllers = HealthcareProfessionalController.class)
-class HealthcareProfessionalControllerTest {
+class HealthcareProfessionalControllerContractTest {
 
     @Autowired
     private MockMvc mockMvc;

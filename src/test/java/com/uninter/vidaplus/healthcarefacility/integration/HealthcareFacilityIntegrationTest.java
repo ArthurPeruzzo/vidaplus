@@ -1,7 +1,6 @@
 package com.uninter.vidaplus.healthcarefacility.integration;
 
 import com.uninter.vidaplus.resources.testcontainer.AbstractContainer;
-import com.uninter.vidaplus.security.databuilder.entity.RoleEntityDataBuilder;
 import com.uninter.vidaplus.security.infra.config.SecurityConfiguration;
 import com.uninter.vidaplus.security.user.core.domain.RoleEnum;
 import com.uninter.vidaplus.security.user.infra.entity.RoleEntity;
@@ -48,17 +47,12 @@ class HealthcareFacilityIntegrationTest extends AbstractContainer {
     @Test
     void shouldCreateSuccessFully() {
 
-        RoleEntity roleEntity = new RoleEntityDataBuilder()
-                .withId(null)
-                .withRole(RoleEnum.ROLE_ADMINISTRATOR)
-                .build();
-
-        roleRepository.saveAndFlush(roleEntity);
+        List<RoleEntity> roles = roleRepository.findByNameIn(List.of(RoleEnum.ROLE_ADMINISTRATOR));
 
         UserEntity user = UserEntity.builder()
                 .email("any@any.com")
                 .password(securityConfiguration.passwordEncoder().encode("any"))
-                .roles(List.of(roleEntity))
+                .roles(roles)
                 .build();
 
         userRepository.saveAndFlush(user);
@@ -99,6 +93,72 @@ class HealthcareFacilityIntegrationTest extends AbstractContainer {
                 .post("/healthcare-facilities")
                 .then()
                 .statusCode(201);
+
+    }
+
+    @Test
+    void shouldFindHealthcareFacilitySuccessFully() {
+
+        List<RoleEntity> roles = roleRepository.findByNameIn(List.of(RoleEnum.ROLE_ADMINISTRATOR));
+
+        UserEntity user = UserEntity.builder()
+                .email("any@any.com")
+                .password(securityConfiguration.passwordEncoder().encode("any"))
+                .roles(roles)
+                .build();
+
+        userRepository.saveAndFlush(user);
+
+        String token = RestAssured
+                .given()
+                .contentType("application/json")
+                .body("""
+                        {
+                            "email": "any@any.com",
+                            "password": "any"
+                        }
+                        """)
+                .when()
+                .post("/authenticate/login")
+                .then()
+                .statusCode(200)
+                .body("token", Matchers.notNullValue())
+                .body("token", Matchers.instanceOf(String.class))
+                .extract()
+                .path("token");
+
+        Assertions.assertNotNull(token);
+
+        Header header = new Header("Authorization", token);
+
+        RestAssured
+                .given()
+                .contentType("application/json")
+                .header(header)
+                .body("""
+                        {
+                            "name": "Teste",
+                            "cnpj": "99607784000188"
+                        }
+                        """)
+                .when()
+                .post("/healthcare-facilities")
+                .then()
+                .statusCode(201);
+
+        int size = RestAssured
+                .given()
+                .contentType("application/json")
+                .header(header)
+                .param("page", "0")
+                .param("pageSize", "10")
+                .when()
+                .get("/healthcare-facilities")
+                .then()
+                .statusCode(200).extract()
+                .path("content.size()");
+
+        Assertions.assertEquals(1, size);
 
     }
 }

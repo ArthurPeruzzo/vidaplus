@@ -1,4 +1,4 @@
-package com.uninter.vidaplus.security.authenticate.controller;
+package com.uninter.vidaplus.security.authenticate.contract;
 
 import com.uninter.vidaplus.resources.NoSecurityConfiguration;
 import com.uninter.vidaplus.security.authenticate.core.usecase.AuthenticateUserUseCase;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("controller-test")
 @ImportAutoConfiguration(NoSecurityConfiguration.class)
 @WebMvcTest(controllers = AuthenticateController.class)
-class AuthenticateControllerTest {
+class AuthenticateControllerContractTest {
 
     @Autowired
     private MockMvc mockMvc;
