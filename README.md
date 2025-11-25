@@ -24,17 +24,23 @@ java -version
   * Uma conexão em 127.0.0.1(localhost) e na porta 3306
   * Um banco chamado "vida_plus"
   * Que as credenciais do banco seja definida como "root". Isso pode mudar, mas será necessário alterar as propriedade contidas dentro do application.properites do projeto 
-  * Que a propriedade "allowPublicKeyRetrieval" esteja marcada como TRUE. O MySQL 8 exige enviar a chave pública ao cliente para autenticar a senha, e o      driver JDBC bloqueia isso por padrão
+  * Que a propriedade "allowPublicKeyRetrieval" esteja marcada como TRUE. O MySQL 8 exige enviar a chave pública ao cliente para autenticar a senha, e o driver JDBC bloqueia isso por padrão
 
   * Segue comando docker com toda a parametrização necessária para criar a imagem
 ```
-colocar comando docker aqui
+docker run \
+  --name mysql-vida-plus \
+  -p 127.0.0.1:3306:3306 \
+  -e MYSQL_ROOT_PASSWORD=root \
+  -e MYSQL_DATABASE=vida_plus \
+  -e MYSQL_USER=root \
+  -e MYSQL_PASSWORD=root \
+  -e MYSQL_ROOT_HOST=% \
+  -e MYSQL_ALLOW_PUBLIC_KEY_RETRIEVAL=true \
+  -v mysql_data:/var/lib/mysql \
+  -d mysql:8.0.32
 ```
-- Após criar a conexão é necessário criar o banco para que a aplicação se conecte.
 
-```
-CREATE DATABASE vida_plus;
-```
 - Nas migrations do Flyway existe um usuário administrador já inserido. Com ele será possível criar os outros tipos de usuários e executar todas as rotinas da aplicação. Como o projeto é de carater de teste irei expor o usuário e senha.
 
 ```
@@ -77,3 +83,5 @@ O projeto utiliza a swagger para documentação dos endpoints. Essa ferramenta o
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
+### 📜 Licença
+Este projeto é de uso acadêmico e educativo. Você pode utilizá-lo para estudos, melhorias e referências.
