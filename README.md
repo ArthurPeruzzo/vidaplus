@@ -1,6 +1,6 @@
 # Vida Plus
 
-Vida Plus é um Sistema de Gestão Hospitalar e de Serviços de Saúde. Ele centraliza o cadastro de pacientes, profissionais da saúde e administradores. Através dele é possível gerenciar agendamentos para consultas em unidades hospitalares.
+Vida Plus é um Sistema de Gestão Hospitalar e de Serviços de Saúde. Ele centraliza o cadastro de pacientes, profissionais da saúde e administradores, permitindo gerenciar agendamentos de consultas em unidades hospitalares.
 
 ## 🚀 Tecnologias Principais
 * Java 25
@@ -20,13 +20,12 @@ java -version
 ```
 
 #### MySQL 8.0.32
-  * É possível baixar o MySQL em sua máquina ou simplesmente criar uma imagem docker. Independente da forma que isso seja feito o projeto espera o seguinte:
-  * Uma conexão em 127.0.0.1(localhost) e na porta 3306
-  * Um banco chamado "vida_plus"
-  * Que as credenciais do banco seja definida como "root". Isso pode mudar, mas será necessário alterar as propriedade contidas dentro do application.properites do projeto 
-  * Que a propriedade "allowPublicKeyRetrieval" esteja marcada como TRUE. O MySQL 8 exige enviar a chave pública ao cliente para autenticar a senha, e o driver JDBC bloqueia isso por padrão
-
-  * Segue comando docker com toda a parametrização necessária para criar a imagem
+Você pode instalar o MySQL na máquina ou utilizar um container Docker. O projeto espera:
+  * Conexão em 127.0.0.1:3306
+  * Um banco chamado vida_plus
+  * Credenciais padrão root / root
+  * Propriedade JDBC allowPublicKeyRetrieval=true habilitada (MySQL 8 exige envio de chave pública durante a autenticação)
+  * Segue comando docker com toda a parametrização necessária para criar o container
 ```
 docker run \
   --name mysql-vida-plus \
@@ -40,9 +39,8 @@ docker run \
   -v mysql_data:/var/lib/mysql \
   -d mysql:8.0.32
 ```
-
-- Nas migrations do Flyway existe um usuário administrador já inserido. Com ele será possível criar os outros tipos de usuários e executar todas as rotinas da aplicação. Como o projeto é de carater de teste irei expor o usuário e senha.
-
+#### 👤 Usuário administrador inicial
+- O Flyway insere um usuário administrador para facilitar os testes. Como o ambiente é estritamente acadêmico irei expor o usuário e senha.
 ```
 email: admin@email.com
 senha: VidaPlus2025!@#
@@ -53,22 +51,24 @@ senha: VidaPlus2025!@#
 ```
 git clone https://github.com/ArthurPeruzzo/vidaplus.git
 ```
-2. Compilar. Isso pode ser feito com o cógio baixo ou através da IDE
+2. Compilar via terminal ou IDE
 ```
 mvn clean install
 ```
-3. Executar. Isso pode ser feito com o cógio baixo ou através da IDE
+3. Executar via terminal ou IDE
 ```
 mvn spring-boot:run
 ```
-4. Acessar. A aplicação iniciará normalmente em
+4. Acessar a aplicação
 ```
 http://localhost:8080
 ```
 
 
 ## ⚙️ Executando os testes
-O projeto contém testes unitários e testes integrados. Para rodá-los com sucesso é necessário ter o docker instalado, pois existem testes integrados que utilizam da ferramenta de TestContainers para subir o banco de dados e assim executar a bateria de testes. Além do docker é necessário que o usuário esteja vinculado a um grupo. Assim a ferramenta consegue ter o permissionamento necessáiro para rodar os testes.
+O projeto possui testes unitários e integrados. Para rodar os testes integrados é necessário:
+- Docker instalado
+- Usuário pertencendo ao grupo docker (para execução sem sudo)
 
 - Comando para adicionar seu usuário a um grupo
 ```
@@ -79,9 +79,10 @@ sudo usermod -aG docker $USER
 docker ps
 ```
 ## 📋 Documentação dos endpoints
-O projeto utiliza a swagger para documentação dos endpoints. Essa ferramenta organiza e documenta de forma clara cada endpoint que existe dentro da aplicação. Em cada endpoint há a sua descrição, seu propósito. Junto a isso também está documentado a entrada de dados e retornos esperados. Após compilar a aplicação será possível acessar a documentação através do link abaixo
+A aplicação utiliza Swagger para documentar e visualizar os endpoints
+- Após iniciar o projeto, acesse:
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
 ### 📜 Licença
-Este projeto é de uso acadêmico e educativo. Você pode utilizá-lo para estudos, melhorias e referências.
+Este projeto é de uso acadêmico e educativo. Pode ser utilizado para estudos, melhorias e referências.
