@@ -51,15 +51,19 @@ senha: VidaPlus2025!@#
 ```
 git clone https://github.com/ArthurPeruzzo/vidaplus.git
 ```
-2. Compilar via terminal ou IDE
+2. Com o comando abaixo é possível criar a variável de ambiente JWT, mas é preferível que a configuração seja feita via IDE ou até mesmo somente colocando uma valor qualquer na variável "jwt.secret".
+```
+export JWT_SECRET="minhaChaveSecreta"
+```
+3. Compilar via terminal ou IDE
 ```
 mvn clean install
 ```
-3. Executar via terminal ou IDE
+4. Executar via terminal ou IDE
 ```
-mvn spring-boot:run
+mvn spring-boot:start
 ```
-4. Acessar a aplicação
+5. Acessar a aplicação
 ```
 http://localhost:8080
 ```
