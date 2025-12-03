@@ -53,7 +53,7 @@ git clone https://github.com/ArthurPeruzzo/vidaplus.git
 ```
 2. Com o comando abaixo é possível criar a variável de ambiente JWT, mas é preferível que a configuração seja feita via IDE ou até mesmo somente colocando uma valor qualquer na variável "jwt.secret".
 ```
-export JWT_SECRET="minhaChaveSecreta"
+export JWT_SECRET="minhaChaveUltraSecreta"
 ```
 3. Compilar via terminal ou IDE
 ```
