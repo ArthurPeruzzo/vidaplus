@@ -32,12 +32,11 @@ docker run \
   -p 127.0.0.1:3306:3306 \
   -e MYSQL_ROOT_PASSWORD=root \
   -e MYSQL_DATABASE=vida_plus \
-  -e MYSQL_USER=root \
-  -e MYSQL_PASSWORD=root \
   -e MYSQL_ROOT_HOST=% \
   -e MYSQL_ALLOW_PUBLIC_KEY_RETRIEVAL=true \
   -v mysql_data:/var/lib/mysql \
   -d mysql:8.0.32
+
 ```
 #### 👤 Usuário administrador inicial
 - O Flyway insere um usuário administrador para facilitar os testes. Como o ambiente é estritamente acadêmico irei expor o usuário e senha.
