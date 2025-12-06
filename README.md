@@ -87,5 +87,6 @@ A aplicação utiliza Swagger para documentar e visualizar os endpoints
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
+Os endpoints também estão documentados no postman. Há um arquivo chamado "vida plus.postman_collection.json". Basta importá-lo no postman.
 ### 📜 Licença
 Este projeto é de uso acadêmico e educativo. Pode ser utilizado para estudos, melhorias e referências.
