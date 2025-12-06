@@ -60,7 +60,7 @@ mvn clean install
 ```
 4. Executar via terminal ou IDE
 ```
-mvn spring-boot:start
+mvn spring-boot:run
 ```
 5. Acessar a aplicação
 ```
