@@ -54,7 +54,7 @@ git clone https://github.com/ArthurPeruzzo/vidaplus.git
 ```
 export JWT_SECRET="minhaChaveUltraSecreta"
 ```
-3. Compilar via terminal ou IDE
+3. Compilar via terminal ou IDE. Caso a suíte de testes não rode, verifique a seção abaixo que mostra como executá-los.
 ```
 mvn clean install
 ```
